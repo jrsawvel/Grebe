@@ -1,0 +1,16 @@
+<header>
+<div style="float:right;padding-right:10px;">
+<!-- <a title="Search" href="<!-- tmpl_var name="cgi_app" -->/searchform">search</a> -->
+<!-- <a title="Search" href="<!-- tmpl_var name="cgi_app" -->/searchform"><img border="0" width="16" height="16"  src="/images/magnifyingglass.png"></a>  -->
+<a title="Search" href="<!-- tmpl_var name="cgi_app" -->/searchform"><img border="0" src="/images/magnifying-glass-2.png"></a> 
+</div>
+<nav>
+<ul>
+<li><a title="Home Page" href="<!-- tmpl_var name="home_page" -->">MT</a></li>
+<!-- tmpl_if loggedin --> 
+<li class="userlink"><a title="Your profile and settings" href="<!-- tmpl_var name="cgi_app" -->/user/<!-- tmpl_var name="user_name" -->">U</a></li>
+<li class="userlink"><a title="Create new post" href="<!-- tmpl_var name="cgi_app" -->/compose">C</a></li>
+<!-- /tmpl_if -->
+</ul>
+</nav>
+</header>

@@ -1,0 +1,34 @@
+---
+    template_home:                  /home/maketoledo/Grebe/tmpl
+    post_templates:                 /home/maketoledo/posts
+    site_name:                      MakeToledo
+    app_name:                       Grebe v1.0
+    cgi_app:                         
+    home_page:                      http://maketoledo.com
+#    site_description:               Making the most of the Toledo region
+    site_description:               Enjoying life in the Toledo region
+    admin_email:                    na
+    admin_email_2:                  na 
+    domain_name:                    maketoledo.com
+    css_dir_url:                    http://maketoledo.com/css 
+    maincss_url:                    http://maketoledo.com/css/grebe.css
+    api_url:                        http://maketoledo.com/api/v1
+    background_image:               http://maketoledo.com/images/downtown-toledo-winter-a.jpg 
+    cookie_prefix:                  grebe
+    max_title_length:               150
+    max_entries_on_page:            20 
+    new_user_signups_allowed:       1
+    debug_mode:                     1
+    multiple_sessionids:            1
+    max_pwd_len:                    30
+    min_pwd_len:                    8
+    database_host:                  junco
+    database_name:                  junco
+    database_username:              junco
+    database_password:              junco*db!
+    dbtable_users:                  grebe_users
+    dbtable_posts:                  grebe_posts
+    dbtable_tags:                   grebe_tags
+    dbtable_sessionids:             grebe_sessionids
+    valid_html:                     div span table a th tr td center pre dl dt dd img code pt em strong br blockquote big small strike del ins b i u section article
+    max_unique_hashtags:            8
