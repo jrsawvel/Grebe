@@ -11,7 +11,8 @@ sub show_post {
     my $user_name    = User::get_logged_in_username(); 
     my $user_id      = User::get_logged_in_userid(); 
     my $session_id   = User::get_logged_in_sessionid(); 
-    my $query_string = "/?user_name=$user_name&user_id=$user_id&session_id=$session_id&text=html";
+#    my $query_string = "/?user_name=$user_name&user_id=$user_id&session_id=$session_id&text=html";
+    my $query_string = "/?user_name=$user_name&user_id=$user_id&session_id=$session_id";
 
 #    my $post = $tmp_hash->{one}; 
     my $post;
@@ -46,6 +47,12 @@ sub show_post {
 
     my $api_url = Config::get_value_for("api_url") . "/posts/" . $post;
 
+    if ( $tmp_hash->{one} eq "writetemplate" ) {
+        $query_string .= "&text=full";  
+    } else {
+        $query_string .= "&text=html";  
+    }
+
     my $rest = REST::Client->new();
     $api_url .= $query_string;
     $rest->GET($api_url);
@@ -69,6 +76,8 @@ sub show_post {
         } else {
            $t = Page->new("post");
         }
+
+        my $save_markup = $json->{markup_text} .  "\n\n<!-- author_name: $json->{author_name} -->\n<!-- created_date: $json->{created_date} -->\n<!-- modified_date: $json->{modified_date} -->\n";
 
         $t->set_template_variable("cgi_app",                 "");
         $t->set_template_variable("post_id",              $json->{post_id});
@@ -114,6 +123,7 @@ sub show_post {
         }
 
         if ( $write_template ) {
+            # write html of the post to the file system as an HTML::Template file.
             my $tmpl_output = $t->create_html($json->{title});
             $tmpl_output = "<!-- tmpl_include name=\"header.tmpl\" -->\n" . $tmpl_output . "\n<!-- tmpl_include name=\"footer.tmpl\" -->\n";
             my $filename = Config::get_value_for("post_templates") . "/" . $json->{post_id} . ".tmpl"; 
@@ -122,10 +132,21 @@ sub show_post {
             } else {
                 Page->report_error("user", "Bad file name.", "Could not write template for post id: $json->{post_id} filename: $filename");
             }
-
             open FILE, ">$filename" or Page->report_error("user", "Unable to open file for write.", "Post id: $json->{post_id} filename: $filename");
             print FILE $tmpl_output;
             close FILE;
+
+            # write markup (multimarkdown or textile) to the file system.
+            my $markup_filename = Config::get_value_for("post_markup") . "/" . $json->{post_id} . ".markup"; 
+            if ( $markup_filename =~  m/^([a-zA-Z0-9\/\.\-_]+)$/ ) {
+                $markup_filename = $1;
+            } else {
+                Page->report_error("user", "Bad file name.", "Could not write markup for post id: $json->{post_id} filename: $markup_filename");
+            }
+            open FILE, ">$markup_filename" or Page->report_error("user", "Unable to open file for write.", "Post id: $json->{post_id} filename: $markup_filename");
+            print FILE $save_markup;
+            close FILE;
+
             my $q = new CGI;
             my $url = Config::get_value_for("home_page") . "/" . $json->{post_id} . "/" . $json->{uri_title};
             print $q->redirect( -url => $url);

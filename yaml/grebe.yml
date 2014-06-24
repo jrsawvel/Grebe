@@ -1,11 +1,11 @@
 ---
     template_home:                  /home/maketoledo/Grebe/tmpl
     post_templates:                 /home/maketoledo/posts
+    post_markup:                    /home/maketoledo/markup
     site_name:                      MakeToledo
     app_name:                       Grebe v1.0
     cgi_app:                         
     home_page:                      http://maketoledo.com
-#    site_description:               Making the most of the Toledo region
     site_description:               Enjoying life in the Toledo region
     admin_email:                    na
     admin_email_2:                  na 
