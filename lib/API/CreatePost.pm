@@ -17,6 +17,7 @@ use API::DigestMD5;
 use API::Db;
 use API::PostTitle;
 use API::GetPost;
+use API::WriteTemplateMarkup;
 
 my $pt_db_source       = Config::get_value_for("database_host");
 my $pt_db_catalog      = Config::get_value_for("database_name");
@@ -107,6 +108,7 @@ sub create_post {
             my $post_hash = GetPost::_get_post($post_id);
             $hash{post_digest}    = $post_hash->{post_digest};
         } 
+        WriteTemplateMarkup::output_template_and_markup($logged_in_user_id, $post_id) if Config::get_value_for("save_template_and_markup");
     } elsif ( $submit_type eq "Preview" ) {
         $hash{formatted_text} = $formatted_text;
         $hash{title} = $post_title;

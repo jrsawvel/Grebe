@@ -31,4 +31,5 @@
     dbtable_tags:                   grebe_tags
     dbtable_sessionids:             grebe_sessionids
     valid_html:                     div span table a th tr td center pre dl dt dd img code pt em strong br blockquote big small strike del ins b i u section article
-    max_unique_hashtags:            8
+    max_unique_hashtags:            10
+    save_template_and_markup:       1

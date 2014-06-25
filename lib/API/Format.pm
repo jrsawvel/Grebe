@@ -344,7 +344,6 @@ sub process_custom_code_block_encode {
         $code =~ s/</\[lt;/gs;
         $code =~ s/>/gt;\]/gs;
         $str = $start . "ccooddee." . $code . "ccooddee.." . $end;
-#        Page->report_error("user", "debug", "$str");
     } 
     $str =~ s/ccooddee/code/igs;
  

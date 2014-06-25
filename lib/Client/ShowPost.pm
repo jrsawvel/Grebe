@@ -27,8 +27,6 @@ sub show_post {
 
     my $t;
 
-    my $write_template = 0;
-
     if ( $tmp_hash->{function} eq "post" ) {
         $post = $tmp_hash->{one}; 
     } elsif ( $user_id < 1 and StrNumUtils::is_numeric($tmp_hash->{function}) ) {
@@ -47,11 +45,7 @@ sub show_post {
 
     my $api_url = Config::get_value_for("api_url") . "/posts/" . $post;
 
-    if ( $tmp_hash->{one} eq "writetemplate" ) {
-        $query_string .= "&text=full";  
-    } else {
-        $query_string .= "&text=html";  
-    }
+    $query_string .= "&text=html";  
 
     my $rest = REST::Client->new();
     $api_url .= $query_string;
@@ -69,13 +63,7 @@ sub show_post {
         #    Page->report_error("user", "Invalid access.", "Content does not exist.");
         # }
 
-        $write_template = 1 if $tmp_hash->{one} eq "writetemplate" and $json->{reader_is_author};
-
-        if ( $write_template ) {
-           $t = Page->new("inc_post");
-        } else {
-           $t = Page->new("post");
-        }
+        $t = Page->new("post");
 
         my $save_markup = $json->{markup_text} .  "\n\n<!-- author_name: $json->{author_name} -->\n<!-- created_date: $json->{created_date} -->\n<!-- modified_date: $json->{modified_date} -->\n";
 
@@ -93,7 +81,7 @@ sub show_post {
         $t->set_template_variable("formatted_created_date",  $json->{formatted_created_date});
         $t->set_template_variable("reading_time",            $json->{reading_time});
         $t->set_template_variable("word_count",              $json->{word_count});
-        $t->set_template_variable("reader_is_author",        $json->{reader_is_author}) if !$write_template;
+        $t->set_template_variable("reader_is_author",        $json->{reader_is_author});
 
 
         if ( $json->{modified_date} ne $json->{created_date} ) {
@@ -122,38 +110,7 @@ sub show_post {
             $t->set_template_variable("largeimageheaderurl", $json->{largeimageheaderurl});
         }
 
-        if ( $write_template ) {
-            # write html of the post to the file system as an HTML::Template file.
-            my $tmpl_output = $t->create_html($json->{title});
-            $tmpl_output = "<!-- tmpl_include name=\"header.tmpl\" -->\n" . $tmpl_output . "\n<!-- tmpl_include name=\"footer.tmpl\" -->\n";
-            my $filename = Config::get_value_for("post_templates") . "/" . $json->{post_id} . ".tmpl"; 
-            if ( $filename =~  m/^([a-zA-Z0-9\/\.\-_]+)$/ ) {
-                $filename = $1;
-            } else {
-                Page->report_error("user", "Bad file name.", "Could not write template for post id: $json->{post_id} filename: $filename");
-            }
-            open FILE, ">$filename" or Page->report_error("user", "Unable to open file for write.", "Post id: $json->{post_id} filename: $filename");
-            print FILE $tmpl_output;
-            close FILE;
-
-            # write markup (multimarkdown or textile) to the file system.
-            my $markup_filename = Config::get_value_for("post_markup") . "/" . $json->{post_id} . ".markup"; 
-            if ( $markup_filename =~  m/^([a-zA-Z0-9\/\.\-_]+)$/ ) {
-                $markup_filename = $1;
-            } else {
-                Page->report_error("user", "Bad file name.", "Could not write markup for post id: $json->{post_id} filename: $markup_filename");
-            }
-            open FILE, ">$markup_filename" or Page->report_error("user", "Unable to open file for write.", "Post id: $json->{post_id} filename: $markup_filename");
-            print FILE $save_markup;
-            close FILE;
-
-            my $q = new CGI;
-            my $url = Config::get_value_for("home_page") . "/" . $json->{post_id} . "/" . $json->{uri_title};
-            print $q->redirect( -url => $url);
-            exit;
-        } else {
-            $t->display_page($json->{title});
-        }
+        $t->display_page($json->{title});
     } elsif ( $rc >= 400 and $rc < 500 ) {
             Page->report_error("user", "$json->{user_message}", $json->{system_message});
     } else  {

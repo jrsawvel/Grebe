@@ -20,7 +20,8 @@ my $dbtable_users      = Config::get_value_for("dbtable_users");
 
 sub get_post {
     my $user_auth   = shift;
-    my $post_id  = shift;
+    my $post_id     = shift;
+    my $subroutine_access_type = shift; # if "private," then another API module is accessing this subroutine.
 
     my $q = new CGI;
 
@@ -83,10 +84,14 @@ sub get_post {
         $hash_ref->{reading_time} = 0;
         $hash_ref->{reading_time} = int($hash_ref->{word_count} / 180) if $hash_ref->{word_count} >= 180;
 
-        my $json_str = encode_json $hash_ref;
-        print header('application/json', '200 Accepted');
-        print $json_str;
-        exit;
+        if ( $subroutine_access_type ne "private" ) {
+            my $json_str = encode_json $hash_ref;
+            print header('application/json', '200 Accepted');
+            print $json_str;
+            exit;
+        } else {
+            return $hash_ref;
+        }
     }
 }
 
