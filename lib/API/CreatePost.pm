@@ -108,7 +108,7 @@ sub create_post {
             my $post_hash = GetPost::_get_post($post_id);
             $hash{post_digest}    = $post_hash->{post_digest};
         } 
-        WriteTemplateMarkup::output_template_and_markup($logged_in_user_id, $post_id) if Config::get_value_for("save_template_and_markup");
+        WriteTemplateMarkup::output_template_and_markup($logged_in_user_id, $post_id); 
     } elsif ( $submit_type eq "Preview" ) {
         $hash{formatted_text} = $formatted_text;
         $hash{title} = $post_title;

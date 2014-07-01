@@ -15,8 +15,8 @@ sub output_template_and_markup {
 
     my $hash_ref = GetPost::get_post(\%user_auth, $post_id, "private");
 
-    _output_template($hash_ref);
-    _output_markup($hash_ref);
+    _output_template($hash_ref) if Config::get_value_for("write_template");
+    _output_markup($hash_ref)   if Config::get_value_for("write_markup");
 }
 
 sub _output_template {
