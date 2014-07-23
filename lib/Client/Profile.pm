@@ -251,4 +251,53 @@ sub create_new_password {
     }
 }
 
+sub create_new_login_link {
+
+    my $q = new CGI;
+
+    my %hash;
+    $hash{user_name}  = $q->param("username");
+    $hash{email}      = $q->param("email");
+    my $json = encode_json \%hash;
+
+    my $headers = {
+        'Content-type' => 'application/x-www-form-urlencoded'
+    };
+
+    my $api_url = Config::get_value_for("api_url");
+    my $rest = REST::Client->new( {
+        host => $api_url,
+    } );
+
+    my $pdata = {
+        'json' => $json,
+    };
+    my $params = $rest->buildQuery( $pdata );
+
+    $params =~ s/\?//;
+
+    $rest->POST( "/users/password" , $params , $headers );
+
+    my $rc = $rest->responseCode();
+    my $json = decode_json $rest->responseContent();
+
+    if ( $rc >= 200 and $rc < 300 ) {
+        my $t = Page->new("newloginlink");
+        if ( Config::get_value_for("debug_mode") ) {
+            Page->report_error("user", "debug user_digest=$json->{user_digest} password_digest=$json->{password_digest}", 
+             "<a href=\"/nopwdlogin/$json->{user_digest}/$json->{password_digest}\">login without a password</a>.");
+        }
+        $t->display_page("Creating New Login Link");
+    } elsif ( $rc >= 400 and $rc < 500 ) {
+        if ( $rc == 401 ) {
+            my $t = Page->new("notloggedin");
+            $t->display_page("Login");
+        } else {
+            Page->report_error("user", "$json->{user_message}", $json->{system_message});
+        }
+    } else  {
+        Page->report_error("user", "Unable to complete request.", "Invalid response code returned from API.");
+    }
+}
+
 1;

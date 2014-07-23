@@ -7,6 +7,7 @@ use JSON::PP;
 use API::Error;
 use API::GetUser;
 use API::Login;
+use API::NoPwdLogin;
 use API::CreateUser;
 use API::ActivateAccount;
 use API::Logout;
@@ -33,8 +34,12 @@ sub users {
 
         if ( exists($tmp_hash->{one}) and $tmp_hash->{one} eq "login" ) {
             Login::login($q->param("json"));
+        } elsif ( exists($tmp_hash->{one}) and $tmp_hash->{one} eq "nopwdlogin" ) {
+            NoPwdLogin::no_password_login($q->param("json"));
         } elsif ( exists($tmp_hash->{one}) and $tmp_hash->{one} eq "password" ) {
             Password::create_new_password($q->param("json"));
+        } elsif ( exists($tmp_hash->{one}) and $tmp_hash->{one} eq "nopwdlogin" ) {
+            Login::login_with_no_password($q->param("json"));
         } elsif ( !exists($tmp_hash->{one}) ) {
             _add_user($q->param("json"));   
         } else {

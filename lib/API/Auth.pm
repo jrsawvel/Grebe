@@ -69,23 +69,22 @@ sub valid_user {
         return 0;
     }
 
-    if ( !$multiple_sessionids  and  $h->{session_id} ne $hash{session_id} ) {
-            return 0;
-    } elsif ( $multiple_sessionids ) {
-        my $tmp_sessionid = $db->quote($h->{session_id});
-        my $sql = "select user_id from $dbtable_sessionids where session_id=$tmp_sessionid and session_status='o' limit 1";
-        $db->execute($sql);
-        return 0 if $db->err;
-        if ( $db->fetchrow ) {
-            my $userid = $db->getcol("user_id");
-            if ( $userid != $h->{user_id} ) {
-                $db->disconnect;
-                return 0;
-            }
-        } else {
+    my $tmp_sessionid = $db->quote($h->{session_id});
+    my $sql = "select user_id from $dbtable_sessionids where session_id=$tmp_sessionid and session_status='o' limit 1";
+    $db->execute($sql);
+    return 0 if $db->err;
+    if ( $db->fetchrow ) {
+        my $userid = $db->getcol("user_id");
+        if ( $userid != $h->{user_id} ) {
             $db->disconnect;
             return 0;
         }
+    } else {
+        $db->disconnect;
+        return 0;
+    }
+    if ( !$multiple_sessionids  and  $h->{session_id} ne $hash{session_id} ) {
+            return 0;
     }
 
     $db->disconnect;

@@ -46,7 +46,9 @@ sub create_new_password {
     my $email             = $json_params->{"email"};
     my $error_exists = 0;
     my $err_msg = "";
-
+    my $debug_mode         = Config::get_value_for("debug_mode");
+    my $passwordless_login = Config::get_value_for("passwordless_login");
+    
     ###### USERNAME
     if ( !defined($username) ) {
         $err_msg .= "Missing username. ";
@@ -90,10 +92,12 @@ sub create_new_password {
 #todo    Mail::send_password($h[0]{EMAIL}, $h[0]{PWD});
 
     my %hash;
-    $hash{status}       = 200;
-    $hash{description}  = "OK";
-    $hash{email}        = $h[0]{EMAIL};
-    $hash{new_password} = $h[0]{PWD};
+    $hash{status}          = 200;
+    $hash{description}     = "OK";
+    $hash{email}           = $h[0]{EMAIL}      if $debug_mode;
+    $hash{new_password}    = $h[0]{PWD}        if $debug_mode;
+    $hash{password_digest} = $h[0]{PWDDIGEST}  if $debug_mode and $passwordless_login;
+    $hash{user_digest    } = $h[0]{USERDIGEST} if $debug_mode and $passwordless_login;
     my $json_return_str = encode_json \%hash;
     print header('application/json', '200 Accepted');
     print $json_return_str;
@@ -144,6 +148,8 @@ sub _create_new_password {
     my $new_userdigest = DigestMD5::create($username_in_database, $origemail, $pwddigest, $datetime);
     $new_userdigest  =~ s|[^\w]+||g;
 
+    $loop_data[0] = {EMAIL=> $tmp_email, PWD => $new_password, PWDDIGEST => $pwddigest, USERDIGEST => $new_userdigest};
+
     $pwddigest      = $db->quote($pwddigest);
     $new_userdigest = $db->quote($new_userdigest);
 
@@ -154,7 +160,7 @@ sub _create_new_password {
     $db->disconnect;
     Error::report_error("500", "Error disconnecting from database.", $db->errstr) if $db->err;
 
-    return $loop_data[0] = {EMAIL=> $tmp_email, PWD => $new_password};
+    return $loop_data[0];
 }
 
 sub update_password {

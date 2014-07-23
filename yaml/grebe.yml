@@ -17,15 +17,16 @@
     cookie_prefix:                  grebe
     max_title_length:               150
     max_entries_on_page:            20 
-    new_user_signups_allowed:       1
+    new_user_signups_allowed:       0
     debug_mode:                     1
-    multiple_sessionids:            1
+    passwordless_login:             1
+    multiple_sessionids:            0
     max_pwd_len:                    30
     min_pwd_len:                    8
-    database_host:                  junco
-    database_name:                  junco
-    database_username:              junco
-    database_password:              junco*db!
+    database_host:                  dbhostname
+    database_name:                  dbname
+    database_username:              dbusername
+    database_password:              dbpassword
     dbtable_users:                  grebe_users
     dbtable_posts:                  grebe_posts
     dbtable_tags:                   grebe_tags
