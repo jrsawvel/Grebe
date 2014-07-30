@@ -1,9 +1,6 @@
 -- grebe-posts.sql
---
--- mysql -p<pwd> -D <database> < grebe-posts.sql
---
 
-drop table if exists grebe_posts;
+-- drop table if exists grebe_posts;
 create table grebe_posts (
     post_id        mediumint unsigned auto_increment primary key,
     parent_id      mediumint unsigned not null default 0, -- (refers_to) this id number shows which post the content belongs to. if type='r', then it's the post id the comment belongs to. if status='v', then it's what post the old version belongs to. 

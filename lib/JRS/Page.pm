@@ -15,9 +15,10 @@ use JRS::DateTimeFormatter;
         my ($class, $template_name, $use_post_tmpl) = @_;
                  
         my $self = {
-            TMPL => undef,
-            NAME => undef,
-            ERROR => 0
+            TMPL  => undef,
+            NAME  => undef,
+            ERROR => 0,
+            ERROR_MESSAGE => undef
         };
 
         my $template_home;
@@ -36,6 +37,7 @@ use JRS::DateTimeFormatter;
         };
         unless ($result) {
             $self->{ERROR} = 1;
+            $self->{ERROR_MESSAGE} = $@;
         }
 
         bless($self, $class);
@@ -46,6 +48,11 @@ use JRS::DateTimeFormatter;
     sub is_error {
         my ($self) = @_;
         return $self->{ERROR};
+    }
+
+    sub get_error_message {
+        my ($self) = @_;
+        return $self->{ERROR_MESSAGE};
     }
 
     sub get_template_name {

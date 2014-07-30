@@ -107,6 +107,7 @@ sub _verify_login {
     Error::report_error("500", "Error retrieving data from database.", $db->errstr) if $db->err;
 
     my $pwddigest = DigestMD5::create($hash{user_name}, $orig_email, $tmp_password, $datetime);
+    $pwddigest =~ s|[^\w]+||g;
 
     if ( $md5_password ne $pwddigest ) {
         %hash = ();

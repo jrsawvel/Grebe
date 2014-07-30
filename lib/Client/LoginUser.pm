@@ -13,6 +13,10 @@ sub show_login_form {
 
 sub report_invalid_login
 {
+    if ( Config::get_value_for("passwordless_login") ) {
+        show_passwordless_login_form();
+    }
+
     my $t = Page->new("invalidlogin");
     $t->display_page("Invalid Login");
 }

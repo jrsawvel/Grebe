@@ -24,13 +24,13 @@ sub show_post {
 #        $post = $tmp_hash->{function}; 
 #    }
 
-
     my $t;
 
     if ( $tmp_hash->{function} eq "post" ) {
         $post = $tmp_hash->{one}; 
     } elsif ( Config::get_value_for("read_template") and $user_id < 1 and StrNumUtils::is_numeric($tmp_hash->{function}) ) {
-        $t = Page->new($tmp_hash->{function}, 1);
+        my $domain_name = Config::get_value_for("domain_name");
+        $t = Page->new($domain_name . "-" . $tmp_hash->{function}, 1);
         if ( $t->is_error() ) {
             $post = $tmp_hash->{function}; 
         } else {

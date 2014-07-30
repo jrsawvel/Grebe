@@ -401,6 +401,10 @@ footer {
 #blog-title {
     font-size: 2em;
     line-height: 1.5em; 
+    /* make the title stand out more 
+    color: #fff;
+    font-weight: bold; 
+    text-shadow: 2px 2px #000000; */
 }
 
 #blog-title a {
@@ -417,6 +421,9 @@ footer {
     font-size: 1em;
     line-height: 1.5em; 
     margin-bottom: 20px; 
+    /* make the description stand out more 
+    color: #fff;
+    text-shadow: 2px 2px #000000; */
 }
 
 /* f. heading text - used for the h1, h2, h3, etc tags */

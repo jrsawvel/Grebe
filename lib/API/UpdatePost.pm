@@ -111,7 +111,7 @@ sub update_post {
         $formatted_text = Format::format_content($markup_text);
     }
 
-    my $uri_title = lc(Format::clean_title($title));
+    my $uri_title = lc(Format::clean_title($post_title));
 
     my %hash;
 

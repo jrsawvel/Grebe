@@ -1,29 +1,25 @@
 ---
-    template_home:                  /home/maketoledo/Grebe/tmpl
-    post_templates:                 /home/maketoledo/posts
-    post_markup:                    /home/maketoledo/markup
-    site_name:                      MakeToledo
+    template_home:                  /home/grebe/Grebe/tmpl
+    post_templates:                 /home/grebe/posts
+    post_markup:                    /home/grebe/markup
+    site_name:                      Grebe
     app_name:                       Grebe v1.0
     cgi_app:                         
-    home_page:                      http://maketoledo.com
-    site_description:               Enjoying life in the Toledo region
+    home_page:                      http://grebe.yoursite.com
+    site_description:               Small blog tool
     admin_email:                    na
     admin_email_2:                  na 
-    domain_name:                    maketoledo.com
-    css_dir_url:                    http://maketoledo.com/css 
-    maincss_url:                    http://maketoledo.com/css/grebe.css
-    api_url:                        http://maketoledo.com/api/v1
-    background_image:               http://maketoledo.com/images/downtown-toledo-winter-a.jpg 
+    domain_name:                    grebe.yoursite.com
+    css_dir_url:                    http://grebe.yoursite.com/css 
+    maincss_url:                    http://grebe.yoursite.com/css/grebe.css
+    api_url:                        http://grebe.yoursite.com/api/v1
+    background_image:               http://grebe.yoursite.com/images/downtown-toledo-winter-a.jpg 
     cookie_prefix:                  grebe
     max_title_length:               150
     max_entries_on_page:            20 
-    new_user_signups_allowed:       0
-    debug_mode:                     1
-    passwordless_login:             1
-    multiple_sessionids:            0
     max_pwd_len:                    30
     min_pwd_len:                    8
-    database_host:                  dbhostname
+    database_host:                  dbhost
     database_name:                  dbname
     database_username:              dbusername
     database_password:              dbpassword
@@ -36,3 +32,11 @@
     write_template:                 1
     write_markup:                   1
     read_template:                  1
+    mailgun_api_key:                key-your-mailgun-api-key
+    mailgun_domain:                 sandbox-your-info-here.mailgun.org
+    mailgun_from:                   Mailgun Sandbox <postmaster@sandbox111111-your-info-here.mailgun.org>
+    #
+    debug_mode:                     0
+    new_user_signups_allowed:       1
+    passwordless_login:             1
+    multiple_sessionids:            0

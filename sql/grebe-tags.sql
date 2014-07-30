@@ -1,5 +1,5 @@
 
-drop table if exists grebe_tags;
+-- drop table if exists grebe_tags;
 create table grebe_tags (
   tag_id 		mediumint unsigned NOT NULL auto_increment primary key,
   tag_name 		varchar(50) NOT NULL default '',

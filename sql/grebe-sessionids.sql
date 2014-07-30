@@ -1,4 +1,4 @@
-drop table if exists grebe_sessionids;
+-- drop table if exists grebe_sessionids;
 create table grebe_sessionids (
   id		        mediumint unsigned NOT NULL auto_increment primary key,
   user_id 	        mediumint unsigned NOT NULL,

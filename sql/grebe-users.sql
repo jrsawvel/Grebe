@@ -1,6 +1,6 @@
 -- grebe-users.sql
 
-drop table if exists grebe_users;
+-- drop table if exists grebe_users;
 create table grebe_users (
     user_id		mediumint unsigned auto_increment, 
     user_name		varchar(30) not null,

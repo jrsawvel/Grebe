@@ -9,7 +9,7 @@ use NEXT;
     use API::DigestMD5;
     use API::Password;
     use API::Utils;
-    # use Junco::Mail;
+    # use API::Mail;
 
     my $MODULE_NAME = "CreateUser";
 

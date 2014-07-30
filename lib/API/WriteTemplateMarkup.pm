@@ -68,7 +68,8 @@ sub _output_template {
     # write html of the post to the file system as an HTML::Template file.
     my $tmpl_output = $t->create_html($hash_ref->{title});
     $tmpl_output = "<!-- tmpl_include name=\"header.tmpl\" -->\n" . $tmpl_output . "\n<!-- tmpl_include name=\"footer.tmpl\" -->\n";
-    my $filename = Config::get_value_for("post_templates") . "/" . $hash_ref->{post_id} . ".tmpl"; 
+    my $domain_name = Config::get_value_for("domain_name");
+    my $filename = Config::get_value_for("post_templates") . "/" . $domain_name . "-" . $hash_ref->{post_id} . ".tmpl"; 
     if ( $filename =~  m/^([a-zA-Z0-9\/\.\-_]+)$/ ) {
         $filename = $1;
     } else {
@@ -85,7 +86,8 @@ sub _output_markup {
     my $save_markup = $hash_ref->{markup_text} .  "\n\n<!-- author_name: $hash_ref->{author_name} -->\n<!-- created_date: $hash_ref->{created_date} -->\n<!-- modified_date: $hash_ref->{modified_date} -->\n";
 
     # write markup (multimarkdown or textile) to the file system.
-    my $markup_filename = Config::get_value_for("post_markup") . "/" . $hash_ref->{post_id} . ".markup"; 
+    my $domain_name = Config::get_value_for("domain_name");
+    my $markup_filename = Config::get_value_for("post_markup") . "/" . $domain_name . "-" . $hash_ref->{post_id} . ".markup"; 
     if ( $markup_filename =~  m/^([a-zA-Z0-9\/\.\-_]+)$/ ) {
         $markup_filename = $1;
     } else {

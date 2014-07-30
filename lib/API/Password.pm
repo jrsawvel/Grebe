@@ -11,7 +11,7 @@ use API::Db;
 use API::DigestMD5;
 use API::Error;
 use API::Utils;
-# use API::Mail;
+use API::Mail;
 
 my $pt_db_source       = Config::get_value_for("database_host");
 my $pt_db_catalog      = Config::get_value_for("database_name");
@@ -89,7 +89,9 @@ sub create_new_password {
         Error:report_error("500", $h[0]{CUSMSG},  $h[0]{SYSMSG});
     }
 
-#todo    Mail::send_password($h[0]{EMAIL}, $h[0]{PWD});
+    if ( !$debug_mode and $passwordless_login ) {
+        Mail::send_passwordless_login_link($h[0]{EMAIL}, $h[0]{USERDIGEST}, $h[0]{PWDDIGEST});
+    }
 
     my %hash;
     $hash{status}          = 200;
@@ -144,6 +146,7 @@ sub _create_new_password {
     $new_password = lc($new_password);
 
     my $pwddigest = DigestMD5::create($tmp_username, $origemail, $new_password, $datetime);
+    $pwddigest =~ s|[^\w]+||g;
 
     my $new_userdigest = DigestMD5::create($username_in_database, $origemail, $pwddigest, $datetime);
     $new_userdigest  =~ s|[^\w]+||g;
