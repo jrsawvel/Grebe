@@ -156,7 +156,7 @@ sub _create_new_password {
     $pwddigest      = $db->quote($pwddigest);
     $new_userdigest = $db->quote($new_userdigest);
 
-    $sql = "update $dbtable_users set password=$pwddigest, user_digest=$new_userdigest  where user_name=$username and email=$email and user_status='o'";
+    $sql = "update $dbtable_users set password=$pwddigest, user_digest=$new_userdigest, login_link_status='p'  where user_name=$username and email=$email and user_status='o'";
     $db->execute($sql);
     Error::report_error("500", "Error executing SQL", $db->errstr) if $db->err;
 

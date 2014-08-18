@@ -17,11 +17,12 @@ my $pt_db_password     = Config::get_value_for("database_password");
 my $dbtable_users      = Config::get_value_for("dbtable_users");
 
 sub get_user {
-    my $user_name = shift;
+    my $user_name           = shift;
     my $logged_in_user_name = shift;
     my $logged_in_user_id   = shift;
+    my $is_auth             = shift;
 
-    my $hash_ref  = _get_user($user_name, $logged_in_user_name, $logged_in_user_id, "no");
+    my $hash_ref  = _get_user($user_name, $logged_in_user_name, $logged_in_user_id, "no", $is_auth);
 
     if ( !$hash_ref ) {
         Error::report_error("404", "Could not retrieve user information.", "$user_name not found.");
@@ -40,6 +41,7 @@ sub _get_user {
     my $logged_in_user_name = shift;
     my $logged_in_user_id   = shift;
     my $private_access      = shift;
+    my $is_auth             = shift;
 
     my $hash_ref;
 
@@ -50,7 +52,7 @@ sub _get_user {
    
     my $sql;
 
-    if ( $user_name eq $logged_in_user_name ) { 
+    if ( ( $user_name eq $logged_in_user_name ) and ( $is_auth == 200 ) ) { 
         $sql = "select user_id, user_name, email, ";
         $sql .= " date_format(date_add(created_date, interval 0 hour), '%b %d, %Y') as created_date, ";
         $sql .= " user_status, desc_markup, desc_format, user_digest ";

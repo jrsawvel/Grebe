@@ -63,7 +63,7 @@ sub users {
         } elsif ( $tmp_hash->{two} eq "logout" and $is_auth->{status} == 200 ) {
             _logout_user($tmp_hash->{one}, $user_auth);
         } elsif ( exists($tmp_hash->{one}) and !exists($tmp_hash->{two}) ) {
-            GetUser::get_user($tmp_hash->{one}, $user_auth->{user_name}, $user_auth->{user_id}); 
+            GetUser::get_user($tmp_hash->{one}, $user_auth->{user_name}, $user_auth->{user_id}, $is_auth->{status}); 
         } else {
             Error::report_error($is_auth->{status}, $is_auth->{user_message}, $is_auth->{system_message});
         }

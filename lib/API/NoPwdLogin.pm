@@ -68,7 +68,7 @@ sub _verify_no_password_login {
    
     my $user_digest     = $db->quote($user_digest); 
     my $password_digest = $db->quote($password_digest); 
-    $sql = "select user_id, user_name, password, created_date, orig_email from $dbtable_users where user_digest=$user_digest and password=$password_digest and user_status='o'";
+    $sql = "select user_id, user_name, password, created_date, orig_email from $dbtable_users where user_digest=$user_digest and password=$password_digest and user_status='o' and login_link_status='p'";
 
     $db->execute($sql);
     Error::report_error("500", "Error executing SQL", $db->errstr) if $db->err;
@@ -100,12 +100,15 @@ sub _verify_no_password_login {
    if ( $multiple_sessionids ) {
        $sql = "insert into $dbtable_sessionids (user_id, session_id, created_date, session_status)";
        $sql .= " values ($hash{user_id}, $sessionid, '$current_datetime', 'o')";
+       $db->execute($sql);
+       Error::report_error("500", "Error executing SQL", $db->errstr) if $db->err;
+       $sql = "update $dbtable_users set login_link_status='d' where user_id=$hash{user_id}";
    } else {
        $sql = "insert into $dbtable_sessionids (user_id, session_id, created_date, session_status)";
        $sql .= " values ($hash{user_id}, $sessionid, '$current_datetime', 'o')";
        $db->execute($sql);
        Error::report_error("500", "Error executing SQL", $db->errstr) if $db->err;
-       $sql = "update $dbtable_users set session_id=$sessionid where user_id=$hash{user_id}";
+       $sql = "update $dbtable_users set session_id=$sessionid, login_link_status='d' where user_id=$hash{user_id}";
    }
    $db->execute($sql);
    Error::report_error("500", "Error executing SQL", $db->errstr) if $db->err;
