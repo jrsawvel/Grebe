@@ -546,7 +546,16 @@ footer {
 
 /* used in the nav area */
 .userlink {
-    background: #ffffff;
+/*    background: #ffffff; using font awesome instead of plain text */
+}
+
+/* http://fortawesome.github.io/Font-Awesome/ */
+.fa {
+    color: #666666;
+}
+
+.fa-cog, .fa-pencil  {
+    color: #3300ff;
 }
 
 .undelete {
@@ -686,6 +695,15 @@ footer {
     }
 }
 
+@media only screen and (max-width: 320px) { 
+    #scroll_text {
+        width: 100%;
+        height: 700px;
+        overflow-y: auto; 
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
 @media only screen and (min-width: 768px) {
     #textareaboxpost {
         width: 90%;
@@ -710,4 +728,5 @@ footer {
 /* ==========================================================================
    End grebe.css
    ========================================================================== */
+
 
