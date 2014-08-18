@@ -139,9 +139,10 @@ sub create_tag_list_str {
 
 sub format_content {
     my $formattedcontent = shift;
+    my $markup_type      = shift;
 
-    my $textile_formatting = 0;
-    $textile_formatting    = 1 if Utils::get_power_command_on_off_setting_for("textile", $formattedcontent, 0); 
+#    my $textile_formatting = 0;
+#    $textile_formatting    = 1 if Utils::get_power_command_on_off_setting_for("textile", $formattedcontent, 0); 
 
     my $newline_to_br = 1;
     if ( !Utils::get_power_command_on_off_setting_for("newline_to_br", $formattedcontent, 1) ) {
@@ -161,7 +162,7 @@ sub format_content {
 
     $formattedcontent = process_custom_code_block_encode($formattedcontent);
 
-    $formattedcontent = HTML::Entities::encode($formattedcontent, '<>') if $textile_formatting;
+    $formattedcontent = HTML::Entities::encode($formattedcontent, '<>') if $markup_type eq "textile";
 
     $formattedcontent = permit_some_html_tags($formattedcontent);
 
@@ -173,12 +174,13 @@ sub format_content {
 
     $formattedcontent = hashtag_to_link($formattedcontent);
 
-    if ( $textile_formatting ) {
+    if ( $markup_type eq "textile" ) {
         $formattedcontent = Textile::textile($formattedcontent);
     } else {
         my $m = Text::MultiMarkdownJRS->new;
         $formattedcontent = $m->markdown($formattedcontent, {newline_to_br => $newline_to_br, heading_ids => 0}  );
     }
+    return $formattedcontent;
 
     $formattedcontent = process_custom_code_block_decode($formattedcontent);
 

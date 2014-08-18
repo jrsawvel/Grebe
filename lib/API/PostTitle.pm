@@ -27,6 +27,7 @@ my $dbtable_users      = Config::get_value_for("dbtable_users");
             posttitle          => undef,
             postid          => 0,
             username           => undef,
+            markup_type        => "markdown",
             content_type       => undef
         };
 
@@ -56,20 +57,23 @@ my $dbtable_users      = Config::get_value_for("dbtable_users");
             $self->{err} = 1;
         } else {
             # remove textile or markdown / multimarkdown heading 1 markup commands if exists.
-            my $textile = 0;
-            $textile = 1 if Utils::get_power_command_on_off_setting_for("textile", $markup, 0); 
-            if ( $textile and $self->{title} =~ m/^h1\.(.+)/i ) {
+#            my $textile = 0;
+#            $textile = 1 if Utils::get_power_command_on_off_setting_for("textile", $markup, 0); 
+            if ( $self->{title} =~ m/^h1\.(.+)/i ) {
                 $self->{title} = $1;
                 $self->{content_type} = "article";
+                $self->{markup_type} = "textile";
             } elsif ( $self->{title} =~ m/^#[\s+](.+)/ ) {
                 $self->{title} = $1;
                 $self->{content_type} = "article";
+                $self->{markup_type} = "markdown";
             } else {
                 $self->{content_type} = "note";
                 if ( length($self->{title}) > 75 ) {
                     $self->{after_title_markup} = $markup;
                     $self->{title} = substr $self->{title}, 0, 75;
                 }
+                $self->{markup_type} = "textile" if Utils::get_power_command_on_off_setting_for("textile", $markup, 0); 
             }
 
 # will not enable namespaces for now. 24apr2014
@@ -119,6 +123,11 @@ my $dbtable_users      = Config::get_value_for("dbtable_users");
     sub get_content_type {
         my ($self) = @_;
         return $self->{content_type};
+    }
+
+    sub get_markup_type {
+        my ($self) = @_;
+        return $self->{markup_type};
     }
 
     sub is_error {

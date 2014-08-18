@@ -206,6 +206,11 @@ sub new {
 
     # Default metadata to 1
     $p{use_metadata} = 1 unless exists $p{use_metadata};
+  
+    # jrs added the following line on Aug 18, 2014 because the metadata feature fouled up text formatting for the opening paragraph of text.
+    # don't understand the point or the complexity of using this metadata feature. will study more later, but for now, it's not used.
+    $p{use_metadata} = 0;    
+
     # Squash value to [01]
     $p{use_metadata} = $p{use_metadata} ? 1 : 0;
 

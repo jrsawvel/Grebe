@@ -82,6 +82,7 @@ sub update_post {
     my $title             = $o->get_title();
     my $post_title        = $o->get_post_title();
     my $content_type      = $o->get_content_type();
+    my $markup_type       = $o->get_markup_type();
     $err_msg             .= $o->get_error_string() if $o->is_error();
 
     if ( defined($err_msg) ) {
@@ -106,9 +107,9 @@ sub update_post {
     my $formatted_text;
 
     if ( $content_type eq "article" ) {
-        $formatted_text = Format::format_content($tmp_markup_text);
+        $formatted_text = Format::format_content($tmp_markup_text, $markup_type);
     } elsif ( $content_type eq "note" ) {
-        $formatted_text = Format::format_content($markup_text);
+        $formatted_text = Format::format_content($markup_text, $markup_type);
     }
 
     my $uri_title = lc(Format::clean_title($post_title));
