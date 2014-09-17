@@ -15,11 +15,13 @@ sub _get_user_cookie_settings {
         $h{loggedin}          = 1;
         $h{current}           = defined($q->cookie($cookie_prefix . "current"))  ?  $q->cookie($cookie_prefix . "current")  :  0; 
         $h{textsize}          = defined($q->cookie($cookie_prefix . "textsize"))  ?  $q->cookie($cookie_prefix . "textsize")  :  "medium"; 
+        $h{fonttype}          = defined($q->cookie($cookie_prefix . "fonttype"))  ?  $q->cookie($cookie_prefix . "fonttype")  :  Config::get_value_for("default_font_type");
         $h{theme}             = defined($q->cookie($cookie_prefix . "theme"))  ?  $q->cookie($cookie_prefix . "theme")  :  $cookie_prefix;
     } else {
         $h{loggedin}          = 0;
         $h{userid}            = -1;
         $h{textsize}          = defined($q->cookie($cookie_prefix . "textsize"))  ?  $q->cookie($cookie_prefix . "textsize")  :  "medium"; 
+        $h{fonttype}          = defined($q->cookie($cookie_prefix . "fonttype"))  ?  $q->cookie($cookie_prefix . "fonttype")  :  Config::get_value_for("default_font_type");
         $h{theme}             = defined($q->cookie($cookie_prefix . "theme"))  ?  $q->cookie($cookie_prefix . "theme")  :  $cookie_prefix;
     }
     return %h;
@@ -27,6 +29,10 @@ sub _get_user_cookie_settings {
 
 sub get_text_size {
     return $parula_h{textsize};
+}
+
+sub get_font_type {
+    return $parula_h{fonttype};
 }
 
 sub get_theme {

@@ -93,6 +93,7 @@ use JRS::DateTimeFormatter;
         __set_template_variable($self, "site_name",    $site_name);
         __set_template_variable($self, "css_dir_url",  Config::get_value_for("css_dir_url")); 
         __set_template_variable($self, "textsize",     User::get_text_size());
+        __set_template_variable($self, "fonttype",     User::get_font_type());
 
         print $self->{TMPL}->output;
 
@@ -125,6 +126,7 @@ use JRS::DateTimeFormatter;
         __set_template_variable($self, "serverdatetime",    $datetimestr);
         __set_template_variable($self, "css_dir_url",       Config::get_value_for("css_dir_url")); 
         __set_template_variable($self, "textsize",          User::get_text_size());
+        __set_template_variable($self, "fonttype",          User::get_font_type());
         __set_template_variable($self, "theme",             User::get_theme());
         
         print $self->{TMPL}->output;

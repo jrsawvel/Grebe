@@ -44,6 +44,7 @@ my $dispatch_for = {
     drafts             =>   sub { return \&do_sub(       "ShowStream",     "show_drafts"              ) }, 
     changes            =>   sub { return \&do_sub(       "ShowStream",     "show_changes"             ) }, 
     textsize           =>   sub { return \&do_sub(       "TextSize",       "set_text_size"            ) },
+    fonttype           =>   sub { return \&do_sub(       "FontType",       "set_font_type"            ) },
     #rss                =>   sub { return \&do_sub(            "RSS",       "get_rss"                  ) },
 };
 

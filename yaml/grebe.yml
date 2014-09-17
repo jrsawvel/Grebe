@@ -15,6 +15,7 @@
     api_url:                        http://grebe.yoursite.com/api/v1
     background_image:               http://grebe.yoursite.com/images/downtown-toledo-winter-a.jpg 
     cookie_prefix:                  grebe
+    default_font_type:              serif
     max_title_length:               150
     max_entries_on_page:            20 
     max_pwd_len:                    30
