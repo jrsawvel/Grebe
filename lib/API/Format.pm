@@ -180,7 +180,6 @@ sub format_content {
         my $m = Text::MultiMarkdownJRS->new;
         $formattedcontent = $m->markdown($formattedcontent, {newline_to_br => $newline_to_br, heading_ids => 0}  );
     }
-    return $formattedcontent;
 
     $formattedcontent = process_custom_code_block_decode($formattedcontent);
 

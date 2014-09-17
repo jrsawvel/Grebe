@@ -7,8 +7,6 @@ my %cgi_params = URI::get_cgi_params_from_path_info("function", "one", "two", "t
 
 my $dispatch_for = {
     posts        =>   sub { return \&do_sub(       "Posts",        "posts"    ) },
-    drafts       =>   sub { return \&do_sub(       "Drafts",       "drafts"      ) },
-    notes        =>   sub { return \&do_sub(       "Notes",        "notes"       ) },
     searches     =>   sub { return \&do_sub(       "Searches",     "searches"    ) },
     tags         =>   sub { return \&do_sub(       "Tags",         "tags"        ) },
     users        =>   sub { return \&do_sub(       "Users",        "users"       ) },
