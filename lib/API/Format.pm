@@ -5,6 +5,8 @@ use warnings;
 
 use Text::MultiMarkdownJRS;
 use Text::Textile;
+use LWP::Simple;
+use HTML::TokeParser;
 
 sub hashtag_to_link {
     my $str = shift;
@@ -308,6 +310,32 @@ sub process_embedded_media {
         $str =~ s|\Q$cmd$arith|$arith = $result|;    
     }
 
+    while ( $str =~ m|^(insta[\s]*=[\s]*)(.*?)$|mi ) {
+        $cmd=$1;
+        $url        = StrNumUtils::trim_spaces($2);
+
+        my $width  = 320;
+        my $height = 320;
+        my $insta;
+        my @parts = split(/\s+/, $url);
+        # $#parts returns the last element number of the array. if two elements, then the number one is returned.
+        if ( $#parts ) { 
+            my @size = split(/[xX]/, $parts[1]);
+            if ( $#size ) {
+                $width  = $size[0];
+                $height = $size[1];
+                my $img_url = _get_instagram_image_url($parts[0]);
+                $insta = qq(<img src="$img_url" width="$width" height="$height"></img>);
+            }
+           
+        } else {
+            my $img_url = _get_instagram_image_url($url);
+            $insta = qq(<img src="$img_url" width="$width" height="$height"></img>);
+        }
+
+        $str =~ s|\Q$cmd$url|$insta|;    
+    }
+
     return $str;
 }
 # embedding media
@@ -383,6 +411,29 @@ sub create_heading_list {
 
     $str .= "\n$header_list";  
     return $str; 
+}
+
+sub _get_instagram_image_url {
+    my $source_url = shift;
+
+    my $img_url = "";
+
+    my $source_content = get($source_url);
+ 
+    my $p = HTML::TokeParser->new(\$source_content);
+
+    # my $d = $p->get_tag('meta');
+    # $d->[1]{name});  == author
+    # $d->[1]{content}); == barney
+    # Data Dumper: VAR1 = [ 'meta', { '/' => '/', 'content' => 'barney', 'name' => 'author' }, [ 'name', 'content', '/' ], '' ];
+
+    while ( my $meta_tag = $p->get_tag('meta') ) {
+        if ( $meta_tag->[1]{property} eq "og:image" ) {
+            $img_url = $meta_tag->[1]{content}; 
+        }
+    }
+
+    return $img_url;
 }
 
 1;
