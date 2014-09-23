@@ -81,12 +81,16 @@ sub custom_commands {
     # br.
     # more.
     # code. and code..
+    # fence. and fence..
 
     $formattedcontent =~ s/^q[.][.]/\n<\/div>/igm;
     $formattedcontent =~ s/^q[.]/<div class="highlighted" markdown="1">/igm;
 
     $formattedcontent =~ s/^code[.][.]/<\/code><\/pre><\/div>/igm;
     $formattedcontent =~ s/^code[.]/<div class="codeClass"><pre><code>/igm;
+
+    $formattedcontent =~ s/^fence[.][.]/<\/code><\/pre><\/div>/igm;
+    $formattedcontent =~ s/^fence[.]/<div class="fenceClass"><pre><code>/igm;
 
     $formattedcontent =~ s/^hr[.]/<hr \/>/igm;
 
