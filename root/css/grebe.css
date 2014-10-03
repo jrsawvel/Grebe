@@ -263,6 +263,8 @@ footer {
 .post {
     color: #000000;
     font-size: 1.2em; 
+    /* font-size: 125% */
+    /* font-size: 120%; approx same as 1.2em */
     line-height: 1.7em;
 }
 
@@ -561,7 +563,7 @@ footer {
     color: #666666;
 }
 
-.fa-cog, .fa-pencil  {
+.fa-cog, .fa-pencil, .fa-file-text  {
     color: #3300ff;
 }
 
@@ -618,18 +620,6 @@ footer {
   smartphone 320-480px  
 */
 
-/* 76.5em = 1224 px */
-@media only screen and (min-width: 76.5em) { 
-    .post {
-        color: #222222;
-    }
-
-    .post p {
-        margin-top: 25px;
-        margin-bottom: 25px;
-    }
-}    
-
 /* 45em = 720 px */
 @media only screen and (max-width: 45em) { 
     #content {
@@ -648,8 +638,9 @@ footer {
     }
 
     .post {
-        font-size: 1.15em;
-        line-height: 1.4em;
+        /* font-size: 1.15em; commented out on 2-Oct-2014 */
+        /* line-height: 1.4em; commented out on 2-Oct-2014 */
+        font-size: 125%;
     }
 
     #toc {
@@ -704,6 +695,10 @@ footer {
         width: 95%;
         height: 125px;
     }
+
+    .post {
+        color: #222222;
+    }
 }
 
 @media only screen and (max-width: 320px) { 
@@ -737,6 +732,20 @@ footer {
         padding-top: 10px;
     }
 }
+
+/* 76.5em = 1224 px */
+@media only screen and (min-width: 76.5em) { 
+/* use if font-size = 125% 
+    .post {
+        color: #333333;
+    }
+*/
+ 
+    .post p {
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+}    
 
 
 /* ==========================================================================

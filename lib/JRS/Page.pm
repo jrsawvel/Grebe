@@ -106,7 +106,7 @@ use JRS::DateTimeFormatter;
     }
 
     sub display_page {
-        my ($self, $function) = @_;
+        my ($self, $function, $post_id) = @_;
 
         my @http_header = ("Content-type: text/html;\n\n", "");
         my $http_header_var = 0;
@@ -128,6 +128,15 @@ use JRS::DateTimeFormatter;
         __set_template_variable($self, "textsize",          User::get_text_size());
         __set_template_variable($self, "fonttype",          User::get_font_type());
         __set_template_variable($self, "theme",             User::get_theme());
+
+        if ( $post_id ) {
+            # save html to redis
+            require Redis;
+            my $hashname =  Config::get_value_for("domain_name");
+            my $key      = $post_id;
+            my $redis = Redis->new; 
+            $redis->hset($hashname, $key => $self->{TMPL}->output );
+        }
         
         print $self->{TMPL}->output;
         exit;

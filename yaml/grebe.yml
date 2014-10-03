@@ -33,6 +33,8 @@
     write_template:                 1
     write_markup:                   1
     read_template:                  1
+    write_html_to_redis:            1
+    read_html_from_redis:           1
     mailgun_api_key:                key-your-mailgun-api-key
     mailgun_domain:                 sandbox-your-info-here.mailgun.org
     mailgun_from:                   Mailgun Sandbox <postmaster@sandbox111111-your-info-here.mailgun.org>

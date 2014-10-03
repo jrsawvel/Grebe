@@ -3,8 +3,12 @@ package WriteTemplateMarkup;
 use strict;
 
 use HTML::Entities;
+use Redis;
 use JRS::Page;
+use JRS::DateTimeFormatter;
 use API::GetPost;
+use API::Stream;
+use LWP::Simple;
 
 sub output_template_and_markup {
     my $logged_in_user_id = shift;
@@ -15,14 +19,38 @@ sub output_template_and_markup {
 
     my $hash_ref = GetPost::get_post(\%user_auth, $post_id, "private");
 
-    _output_template($hash_ref) if Config::get_value_for("write_template");
+    if ( Config::get_value_for("write_template") ) {
+        my $html = _create_html($hash_ref, "inc_post");
+        _output_template($hash_ref, $html) 
+    }
+
+    if ( Config::get_value_for("write_html_to_redis") ) {
+        my $html = _create_html($hash_ref, "post");
+        _write_html_to_redis($hash_ref, $html); 
+        _write_homepage_to_redis($hash_ref);
+    }
+
     _output_markup($hash_ref)   if Config::get_value_for("write_markup");
 }
 
-sub _output_template {
-    my $hash_ref = shift;
+sub _create_html {
+    my $hash_ref  = shift;
+    my $tmpl_file = shift;
 
-    my $t = Page->new("inc_post");
+    my $t = Page->new($tmpl_file);
+
+    if ( $tmpl_file eq "post" ) {
+        my $datetimestr = DateTimeFormatter::create_date_time_stamp_local("(monthname) (daynum), (yearfull) - (12hr):(0min) (a.p.) (TZ)");
+        my $site_name = Config::get_value_for("site_name");
+        $t->set_template_variable("home_page", Config::get_value_for("home_page")); 
+        $t->set_template_variable("site_name", $site_name);
+        $t->set_template_variable("pagetitle", "$hash_ref->{title} | $site_name");
+        $t->set_template_variable("serverdatetime",    $datetimestr);
+        $t->set_template_variable("css_dir_url",       Config::get_value_for("css_dir_url")); 
+        $t->set_template_variable("textsize",          "medium");
+        $t->set_template_variable("fonttype",          "sansserif");
+        $t->set_template_variable("theme",             Config::get_value_for("cookie_prefix"));
+    } 
 
     $t->set_template_variable("cgi_app",                 "");
     $t->set_template_variable("post_id",                 $hash_ref->{post_id});
@@ -67,6 +95,13 @@ sub _output_template {
 
     # write html of the post to the file system as an HTML::Template file.
     my $tmpl_output = $t->create_html($hash_ref->{title});
+
+    return $tmpl_output;
+}
+
+sub _output_template {
+    my $hash_ref    = shift;
+    my $tmpl_output = shift;
     $tmpl_output = "<!-- tmpl_include name=\"header.tmpl\" -->\n" . $tmpl_output . "\n<!-- tmpl_include name=\"footer.tmpl\" -->\n";
     my $domain_name = Config::get_value_for("domain_name");
     my $filename = Config::get_value_for("post_templates") . "/" . $domain_name . "-" . $hash_ref->{post_id} . ".tmpl"; 
@@ -97,5 +132,29 @@ sub _output_markup {
     print FILE $save_markup;
     close FILE;
 }
+
+sub _write_html_to_redis {
+    my $hash_ref = shift;
+    my $html     = shift;
+
+    my $hashname = Config::get_value_for("domain_name");
+    my $key      = $hash_ref->{post_id}; 
+
+    ## Defaults to $ENV{REDIS_SERVER} or 127.0.0.1:6379 per /etc/redis.conf
+    my $redis = Redis->new; 
+    $redis->hset( $hashname, $key => $html );
+}
+
+sub _write_homepage_to_redis {
+    my $hash_ref = shift;
+
+    my $hashname = Config::get_value_for("domain_name");
+    my $key      = "homepage";
+    
+    my $html = get(Config::get_value_for("home_page") . "/articles");
+    my $redis = Redis->new; 
+    $redis->hset( $hashname, $key => $html );
+}
+
 
 1;

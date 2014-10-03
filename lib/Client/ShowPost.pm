@@ -5,6 +5,7 @@ use REST::Client;
 use JSON::PP;
 use HTML::Entities;
 
+
 sub show_post {
     my $tmp_hash = shift;  
 
@@ -30,13 +31,21 @@ sub show_post {
         $post = $tmp_hash->{one}; 
     } elsif ( Config::get_value_for("read_template") and $user_id < 1 and StrNumUtils::is_numeric($tmp_hash->{function}) ) {
         my $domain_name = Config::get_value_for("domain_name");
-        $t = Page->new($domain_name . "-" . $tmp_hash->{function}, 1);
+        my $suffix = $domain_name . "-" . $tmp_hash->{function}; 
+
+        # if the post template file exists, create the HTML by assembling the post template with the header and footer templates.
+        # if post template does not exist, then the app will make the API call and get the info from the database.
+        $t = Page->new($suffix, 1);
         if ( $t->is_error() ) {
             $post = $tmp_hash->{function}; 
         } else {
             my $str = $tmp_hash->{one};
             $str =~ s|[-]| |g;
-            $t->display_page($str);
+            if ( Config::get_value_for("read_html_from_redis") ) {
+                $t->display_page($str, $tmp_hash->{function}); # here function equals the post id number
+            } else {
+                $t->display_page($str);
+            }
         }
     } else {
         $post = $tmp_hash->{function}; 
@@ -64,8 +73,6 @@ sub show_post {
         # }
 
         $t = Page->new("post");
-
-        my $save_markup = $json->{markup_text} .  "\n\n<!-- author_name: $json->{author_name} -->\n<!-- created_date: $json->{created_date} -->\n<!-- modified_date: $json->{modified_date} -->\n";
 
         $t->set_template_variable("cgi_app",                 "");
         $t->set_template_variable("post_id",              $json->{post_id});
