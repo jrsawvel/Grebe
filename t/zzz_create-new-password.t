@@ -1,6 +1,5 @@
 #!/usr/bin/perl -wT
 
-# g_retrieve-password-post.t 
 # request system to create a new password for user
 
 use strict;
@@ -69,5 +68,5 @@ my $rc = $rest->responseCode();
 
 ok($rc >= 200 && $rc < 300 , 'retrieving new password was successful.');
 
-# print $rest->responseContent() . "\n";
+print $rest->responseContent() . "\n";
 

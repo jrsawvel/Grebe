@@ -6,6 +6,7 @@ use REST::Client;
 use JSON::PP;
 use HTML::Entities;
 use Encode;
+use Client::ShowStream;
 
 sub create_post {
     my $q = new CGI;
@@ -61,6 +62,10 @@ sub create_post {
             my $url;
             if ( $post_location eq "notes_stream" ) {
                 $url = Config::get_value_for("home_page") . "/notes"; 
+                # begin change 7Oct2014
+                my $notes_json_stream = decode_json $json->{notes_homepage};
+                ShowStream::_display_stream($notes_json_stream, 1, "notes", undef, "notes", $user_name);
+                # end change 7Oct2014
             } else {
                 $url = Config::get_value_for("home_page") . "/" . $json->{post_id} . "/writetemplate";
             }

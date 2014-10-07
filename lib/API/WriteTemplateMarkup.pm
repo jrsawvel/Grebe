@@ -27,7 +27,7 @@ sub output_template_and_markup {
     if ( Config::get_value_for("write_html_to_redis") ) {
         my $html = _create_html($hash_ref, "post");
         _write_html_to_redis($hash_ref, $html); 
-        _write_homepage_to_redis($hash_ref);
+        _write_homepage_to_redis($hash_ref) if $hash_ref->{post_type} ne "note";
     }
 
     _output_markup($hash_ref)   if Config::get_value_for("write_markup");

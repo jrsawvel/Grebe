@@ -40,7 +40,11 @@ sub get_post {
     my $hash_ref = _get_post($post_id);
 
     if ( !$hash_ref ) {
-        Error::report_error("404", "Post unavailable.", "Post ID not found");
+        if ( $subroutine_access_type ne "private" ) {
+            Error::report_error("404", "Post unavailable.", "Post ID not found");
+        } else {
+            return $hash_ref;
+        }
     } else {
         $hash_ref->{status}            = 200;
         $hash_ref->{description}       = "OK";

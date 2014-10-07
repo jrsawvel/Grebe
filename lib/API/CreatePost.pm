@@ -18,6 +18,8 @@ use API::Db;
 use API::PostTitle;
 use API::GetPost;
 use API::WriteTemplateMarkup;
+use API::GetUser;
+use API::Stream;
 
 my $pt_db_source       = Config::get_value_for("database_host");
 my $pt_db_catalog      = Config::get_value_for("database_name");
@@ -112,6 +114,18 @@ sub create_post {
             $hash{post_digest}    = $post_hash->{post_digest};
         } 
         WriteTemplateMarkup::output_template_and_markup($logged_in_user_id, $post_id); 
+
+        # begin change 7Oct2014
+        if ( $content_type eq "note" ) {
+            # return note stream home page
+            my $user_ref   = GetUser::_get_user($logged_in_user_name, $logged_in_user_name, $logged_in_user_id, "yes", 200); 
+            my %uri_values = ("page_num" => 1, "filter_by_author_name" => 1,  "author_name" => $logged_in_user_name, "post_type" => "note");
+            my $sql        =  Stream::_create_posts_sql(\%uri_values, $logged_in_user_id, $user_ref);
+            my @posts      =  Stream::_get_stream($sql);
+            @posts         =  Stream::_format_posts(\@posts, $logged_in_user_id);
+            $hash{notes_homepage}  =  Stream::_format_json_posts(\@posts, $logged_in_user_id, \%uri_values, $user_ref);
+        }
+        # end change 7Oct2014
     } elsif ( $submit_type eq "Preview" ) {
         $hash{formatted_text} = $formatted_text;
         $hash{title} = $post_title;

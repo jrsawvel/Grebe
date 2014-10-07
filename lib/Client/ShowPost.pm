@@ -52,17 +52,34 @@ sub show_post {
     }
 
 
-    my $api_url = Config::get_value_for("api_url") . "/posts/" . $post;
+    # begin 7Oct2014 change
+    # speed hit is occurred when making the http api request, so when logged in, or when the post is retrieved from the 
+    # database, this block will access the API code directly, instead of making the REST API call, provided
+    # use_api is set to false.
+    my $use_api = 0;
+    my $rc;
+    my $json;
+    if ( $use_api ) {
+        # get post via API call through HTTP
+        my $api_url = Config::get_value_for("api_url") . "/posts/" . $post;
+        $query_string .= "&text=html";  
+        my $rest = REST::Client->new();
+        $api_url .= $query_string;
+        $rest->GET($api_url);
+        $rc = $rest->responseCode();
+        $json = decode_json $rest->responseContent();
+    } else {
+        require API::GetPost;
+        my $user_auth;
+        $user_auth->{user_name}         = $user_name;
+        $user_auth->{user_id}           = $user_id;
+        $user_auth->{logged_in_user_id} = $user_id;
+        $user_auth->{session_id}        = $session_id;
+        $json = GetPost::get_post($user_auth, $post, "private");
+        $rc = $json->{status};
+    }
+    # end 7Oct2014 change
 
-    $query_string .= "&text=html";  
-
-    my $rest = REST::Client->new();
-    $api_url .= $query_string;
-    $rest->GET($api_url);
-
-    my $rc = $rest->responseCode();
-
-    my $json = decode_json $rest->responseContent();
 
     if ( $rc >= 200 and $rc < 300 ) {
 
