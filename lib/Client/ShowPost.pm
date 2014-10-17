@@ -164,7 +164,8 @@ sub show_post_source {
 
     if ( $rc >= 200 and $rc < 300 ) {
         my $t = Page->new("contentsource");
-        $t->set_template_variable("markup_text", decode_entities($json->{markup_text}, '<>&'));
+        # $t->set_template_variable("markup_text", decode_entities($json->{markup_text}, '<>&'));
+        $t->set_template_variable("markup_text", $json->{markup_text});
         $t->print_template("Content-type: text/plain");
     } elsif ( $rc >= 400 and $rc < 500 ) {
             Page->report_error("user", "$json->{user_message}", $json->{system_message});

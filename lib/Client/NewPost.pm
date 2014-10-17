@@ -91,7 +91,8 @@ sub create_post {
         $t->set_template_variable("post_text",    $post_text);
         $t->display_page("Message error"); 
     } else  {
-        Page->report_error("user", "Unable to complete request.", "Invalid response code returned from API.");
+        # Page->report_error("user", "Unable to complete request.", "Invalid response code returned from API.");
+        Page->report_error("user", "Unable to complete request. Invalid response code returned from API.", "$json->{user_message} $json->{system_message}");
     }
 }
 

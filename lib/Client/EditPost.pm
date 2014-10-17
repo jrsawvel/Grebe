@@ -40,7 +40,8 @@ sub show_post_to_edit {
     } elsif ( $rc >= 400 and $rc < 500 ) {
             Page->report_error("user", "$json->{user_message}", $json->{system_message});
     } else  {
-        Page->report_error("user", "Unable to complete request.", "Invalid response code returned from API.");
+        # Page->report_error("user", "Unable to complete request.", "Invalid response code returned from API.");
+        Page->report_error("user", "Unable to complete request. Invalid response code returned from API.", "$json->{user_message} $json->{system_message}");
     }
 }
 
@@ -75,7 +76,7 @@ sub splitscreen_edit {
     } elsif ( $rc >= 400 and $rc < 500 ) {
             Page->report_error("user", "$json->{user_message}", $json->{system_message});
     } else  {
-        Page->report_error("user", "Unable to complete request.", "Invalid response code returned from API.");
+        Page->report_error("user", "Unable to complete request. Invalid response code returned from API.", "$json->{user_message} $json->{system_message}");
     }
 }
 
@@ -139,7 +140,8 @@ sub update_post {
         } elsif ( $submit_type eq "Preview" ) {
             my $t = Page->new("editpostform");
             $t->set_template_variable("formatted_text",       decode_entities($json->{formatted_text}, '<>&'));
-            $t->set_template_variable("markup_text",          $post_text);
+#            $t->set_template_variable("markup_text",          $post_text);
+            $t->set_template_variable("markup_text",          $markup_text); # changes to this on 17oct2014 to handle extended ascii
             $t->set_template_variable("viewing_old_version",  $json->{parent_id});
             $t->set_template_variable("version_number",       $json->{version});
             $t->set_template_variable("post_digest",          $json->{post_digest});
@@ -153,11 +155,12 @@ sub update_post {
     } elsif ( $rc >= 400 and $rc < 500 ) {
         my $t = Page->new("errorpage");
         $t->set_template_variable("errmsg", "Error: $json->{description} - $json->{user_message}");
-#        $t->set_template_variable("post_text",    $json->{markup_content});
+        # $t->set_template_variable("post_text",    $json->{markup_content});
         $t->set_template_variable("post_text",    $post_text);
         $t->display_page("Message error"); 
     } else  {
-        Page->report_error("user", "Unable to complete request.", "Invalid response code returned from API.");
+        # Page->report_error("user", "Unable to complete request.", "Invalid response code returned from API.");
+        Page->report_error("user", "Unable to complete request. Invalid response code returned from API.", "$json->{user_message} $json->{system_message}");
     }
 }
 

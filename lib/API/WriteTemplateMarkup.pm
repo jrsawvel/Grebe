@@ -59,7 +59,8 @@ sub _create_html {
     $t->set_template_variable("version",                 $hash_ref->{version});
     $t->set_template_variable("title",                   $hash_ref->{title}) if $hash_ref->{post_type} ne "note";
     $t->set_template_variable("uri_title",               $hash_ref->{uri_title});
-    $t->set_template_variable("formatted_text",          decode_entities($hash_ref->{formatted_text}, '<>&'));
+#    $t->set_template_variable("formatted_text",          decode_entities($hash_ref->{formatted_text}, '<>&'));
+    $t->set_template_variable("formatted_text",          $hash_ref->{formatted_text});
     $t->set_template_variable("author_name",             $hash_ref->{author_name});
     $t->set_template_variable("related_posts_count",     $hash_ref->{related_posts_count});
     $t->set_template_variable("created_date",            $hash_ref->{created_date});
