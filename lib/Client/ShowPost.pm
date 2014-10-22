@@ -41,8 +41,9 @@ sub show_post {
         } else {
             my $str = $tmp_hash->{one};
             $str =~ s|[-]| |g;
-            if ( Config::get_value_for("read_html_from_redis") ) {
-                $t->display_page($str, $tmp_hash->{function}); # here function equals the post id number
+            if ( Config::get_value_for("read_html_from_memcached") ) { # or use redis
+                $t->display_page($str, $tmp_hash->{function}); # here the function equals the post id number.
+                # will write the html to redis or memcached within Page.pm
             } else {
                 $t->display_page($str);
             }

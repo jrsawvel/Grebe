@@ -4,6 +4,7 @@ use strict;
 
 use HTML::Entities;
 use Redis;
+use Cache::Memcached::libmemcached;
 use JRS::Page;
 use JRS::DateTimeFormatter;
 use API::GetPost;
@@ -24,13 +25,22 @@ sub output_template_and_markup {
         _output_template($hash_ref, $html) 
     }
 
-    if ( Config::get_value_for("write_html_to_redis") ) {
-        my $html = _create_html($hash_ref, "post");
+    _output_markup($hash_ref)   if Config::get_value_for("write_markup");
+
+    my $using_redis     = Config::get_value_for("write_html_to_redis");
+    my $using_memcached = Config::get_value_for("write_html_to_memcached");
+
+    my $html = _create_html($hash_ref, "post");
+
+    if ( $using_redis ) {
         _write_html_to_redis($hash_ref, $html); 
         _write_homepage_to_redis($hash_ref) if $hash_ref->{post_type} ne "note";
     }
 
-    _output_markup($hash_ref)   if Config::get_value_for("write_markup");
+    if ( $using_memcached ) {
+        _write_html_to_memcached($hash_ref, $html); 
+        _write_homepage_to_memcached($hash_ref) if $hash_ref->{post_type} ne "note";
+    }
 }
 
 sub _create_html {
@@ -157,5 +167,32 @@ sub _write_homepage_to_redis {
     $redis->hset( $hashname, $key => $html );
 }
 
+sub _write_html_to_memcached {
+    my $hash_ref = shift;
+    my $html     = shift;
+
+    $html .= "\n<!-- memcached -->\n";
+
+    my $port        = Config::get_value_for("memcached_port");
+    my $domain_name = Config::get_value_for("domain_name");
+    my $key         = $domain_name . "-" . $hash_ref->{post_id}; 
+
+    my $memd = Cache::Memcached::libmemcached->new( { 'servers' => [ "127.0.0.1:$port" ] } );
+    my $rc = $memd->set($key, $html);
+}
+
+sub _write_homepage_to_memcached {
+    my $hash_ref = shift;
+
+    my $html = get(Config::get_value_for("home_page") . "/articles");
+    $html .= "\n<!-- memcached -->\n";
+    
+    my $port        = Config::get_value_for("memcached_port");
+    my $domain_name = Config::get_value_for("domain_name");
+    my $key         = $domain_name . "-homepage";
+
+    my $memd = Cache::Memcached::libmemcached->new( { 'servers' => [ "127.0.0.1:$port" ] } );
+    my $rc = $memd->set($key, $html);
+}
 
 1;

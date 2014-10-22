@@ -136,8 +136,15 @@ use JRS::DateTimeFormatter;
             my $key      = $post_id;
             my $redis = Redis->new; 
             $redis->hset($hashname, $key => $self->{TMPL}->output );
+
+            require Cache::Memcached::libmemcached;
+            my $port = Config::get_value_for("memcached_port");
+            my $key  = $hashname . "-" . $post_id;
+            my $memd = Cache::Memcached::libmemcached->new( { 'servers' => [ "127.0.0.1:$port" ] } );
+            my $html = $self->{TMPL}->output . "\n<!-- memcached built from templates -->\n";
+            my $rc   = $memd->set($key, $html);
         }
-        
+
         print $self->{TMPL}->output;
         exit;
     }
