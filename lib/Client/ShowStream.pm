@@ -60,7 +60,7 @@ sub _show_stream {
         if ( $page_num > 1 ) {
             $query_string .= "&page=$page_num";
         }
-    } elsif ( lc($tmp_hash->{one}) eq "rss" ) {
+    } elsif ( $tmp_hash->{one} and lc($tmp_hash->{one}) eq "rss" ) {
         $doing_rss =  1;
     }
 

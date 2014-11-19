@@ -401,6 +401,9 @@ textarea {
  */
 
 table {
-    border-collapse: collapse;
     border-spacing: 0;
+    /* commented out on 29Oct2014 because my tables with a border displayed
+       improperly in Chrome and IE8, even though the tables displayed fine
+       within Firefox */
+    /* border-collapse: collapse; */
 }

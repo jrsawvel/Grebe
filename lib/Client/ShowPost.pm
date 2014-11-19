@@ -99,7 +99,9 @@ sub show_post {
         $t->set_template_variable("version",                 $json->{version});
         $t->set_template_variable("title",                   $json->{title}) if $json->{post_type} ne "note";
         $t->set_template_variable("uri_title",               $json->{uri_title});
-        $t->set_template_variable("formatted_text",          decode_entities($json->{formatted_text}, '<>&'));
+        # commented it out this line on 19Nov2014 so that wide chars or extended ascii chars could display properly
+        # $t->set_template_variable("formatted_text",          decode_entities($json->{formatted_text}, '<>&'));
+        $t->set_template_variable("formatted_text",          $json->{formatted_text});
         $t->set_template_variable("author_name",             $json->{author_name});
         $t->set_template_variable("related_posts_count",  $json->{related_posts_count});
         $t->set_template_variable("created_date",            $json->{created_date});

@@ -195,4 +195,35 @@ sub _write_homepage_to_memcached {
     my $rc = $memd->set($key, $html);
 }
 
+sub _create_table_of_contents {
+    my $str = shift;
+
+    my @headers = ();
+    my @loop_data = ();
+
+    if ( @headers = $str =~ m{<!-- header:([1-6]):(.*?) -->}igs ) {
+        my $len = @headers;
+        for (my $i=0; $i<$len; $i+=2 ) {
+            my %hash = ();
+            $hash{level}      = $headers[$i];
+            $hash{toclink}    = $headers[$i+1];
+            $hash{cleantitle} = _clean_title($headers[$i+1]);
+            push(@loop_data, \%hash); 
+        }
+    }
+
+    return @loop_data;    
+}
+
+sub _clean_title {
+    my $str = shift;
+    $str =~ s|[-]||g;
+    $str =~ s|[ ]|-|g;
+    $str =~ s|[:]|-|g;
+    $str =~ s|--|-|g;
+    # only use alphanumeric, underscore, and dash in friendly link url
+    $str =~ s|[^\w-]+||g;
+    return $str;
+}
+
 1;

@@ -42,7 +42,10 @@ sub string_search {
         }
         
         $hash{search_string} = $search_string;
+        $hash{search_string} =~ s/ /\+/g;
+        $hash{search_string} = uri_escape($hash{search_string});
     }
+
 
     my $user_name    = User::get_logged_in_username(); 
     my $user_id      = User::get_logged_in_userid(); 
