@@ -137,7 +137,12 @@ sub show_post {
             $t->set_template_variable("largeimageheaderurl", $json->{largeimageheaderurl});
         }
 
-        $t->display_page($json->{title});
+        if ( $user_id < 1 and StrNumUtils::is_numeric($tmp_hash->{function}) and ($json->{post_id} == $tmp_hash->{function})  ) {
+            $t->display_page($json->{title}, $tmp_hash->{function}); # here the function equals the post id number.
+        } else {
+            $t->display_page($json->{title});
+        }
+
     } elsif ( $rc >= 400 and $rc < 500 ) {
             Page->report_error("user", "$json->{user_message}", $json->{system_message});
     } else  {

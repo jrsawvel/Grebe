@@ -11,22 +11,24 @@
 <!-- /tmpl_if -->  
 
 <!-- tmpl_if readingtime --> 
- <span class="greytext"><!-- tmpl_var name="readingtime" --> min read</span>
+ <span class="homepage-min-read greytext"><!-- tmpl_var name="readingtime" --> min read</span>
 <!-- tmpl_else -->
 <!-- tmpl_if more_text_exists -->
 <span class="largescreens-<!-- tmpl_var name="post_type" -->"><br /></span>
 <!-- /tmpl_if -->
 <!-- /tmpl_if -->
 <div>
-<span class="greytext"><a href="<!-- tmpl_var name="cgi_app" -->/user/<!-- tmpl_var name="user_name" -->"><!-- tmpl_var name="user_name" --></a></span> 
-<span class="greytext">- <a href="<!-- tmpl_var name="cgi_app" -->/<!-- tmpl_var name="post_id" -->/<!-- tmpl_var name="uri_title" -->"><time datetime="<!-- tmpl_var name="modified_date" -->"><!-- tmpl_var name="formatted_date" --></time></a></span>
+<span class="homepage-post-author greytext"><a href="<!-- tmpl_var name="cgi_app" -->/user/<!-- tmpl_var name="user_name" -->"><!-- tmpl_var name="user_name" --></a></span> 
+<span class="homepage-post-date greytext">- <a href="<!-- tmpl_var name="cgi_app" -->/<!-- tmpl_var name="post_id" -->/<!-- tmpl_var name="uri_title" -->"><time datetime="<!-- tmpl_var name="modified_date" -->"><!-- tmpl_var name="formatted_date" --></time></a></span>
 <!-- tmpl_if reader_is_author -->
  &nbsp; &nbsp; <span class="greytext"><a title="<!-- tmpl_var name="user_action" --> post" href="<!-- tmpl_var name="cgi_app" -->/<!-- tmpl_var name="user_action" -->/<!-- tmpl_var name="post_id" -->">[<!-- tmpl_var name="user_action" -->]</a></span>
 <!-- /tmpl_if -->
 </div>
 <!-- tmpl_if tags_exist -->
 <!-- tmpl_if more_text_exists -->
+<div class="homepage-tagstring">
  <span class="greytext"><!-- tmpl_var name="tag_link_str" --></span>
+</div>
 <!-- /tmpl_if -->
 <!-- /tmpl_if -->
 </div>

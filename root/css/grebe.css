@@ -261,6 +261,11 @@ footer {
    4. Post - Formatting the main part of an article and a stream of posts
    ========================================================================== */
 
+.largescreens-note {
+    font-size: 90%;    
+    line-height: 1.2em;
+}
+
 .post {
     color: #000000;
     font-size: 1.2em; 
@@ -285,7 +290,8 @@ footer {
 }
 
 .post-stream h1 {
-    font-size: 1.2em;
+    /* font-size: 1.2em; */
+    font-size: 1.6em;
 }
 
 .post big, em {
@@ -412,6 +418,10 @@ footer {
     color: #fff;
     font-weight: bold; 
     text-shadow: 2px 2px #000000; 
+    -moz-text-shadow: 2px 2px 2px #000000;
+    -webkit-text-shadow: 2px 2px 2px #000000;
+    filter: dropshadow(color=#000000, offx=2, offy=2);
+    display: block;
 }
 
 #blog-title a {
@@ -425,12 +435,16 @@ footer {
 }
 
 #blog-description {
-    font-size: 1em;
+    font-size: 1.2em;
     line-height: 1.5em; 
     margin-bottom: 20px; 
     /* make the description stand out more */
     color: #fff;
     text-shadow: 2px 2px #000000; 
+    -moz-text-shadow: 2px 2px 2px #000000;
+    -webkit-text-shadow: 2px 2px 2px #000000;
+    filter: dropshadow(color=#000000, offx=2, offy=2);
+    display: block;
 }
 
 /* f. heading text - used for the h1, h2, h3, etc tags */
@@ -447,6 +461,12 @@ footer {
 .headingtext a:hover {
     color: #000000;
     text-decoration: underline;
+}
+
+.grebe-article {
+    text-indent: -9999px;
+    visibility: hidden;
+    display: none;
 }
 
 /* g. small, grey-colored text links */
@@ -585,6 +605,11 @@ footer {
     float: right;
 }
 
+#post-min-read {
+    float:right; 
+    font-size:80%; 
+    margin-top:5px;
+}
 
 /* ==========================================================================
    7. Utilities from the Ghost blog Casper Theme
@@ -641,15 +666,18 @@ footer {
     .post {
         /* font-size: 1.15em; commented out on 2-Oct-2014 */
         /* line-height: 1.4em; commented out on 2-Oct-2014 */
-        font-size: 125%;
+        font-size: 125%; /* increases the font size when viewed on a small screen */
     }
 
     #toc {
         display: none;
     }
 
-    .largescreens-article, .largescreens-draft {
-    /* display: none; */ /* commented out for testing on 19jun2014 */
+    .largescreens-article, .largescreens-draft, .homepage-tagstring, .homepage-min-read, .homepage-post-author, .homepage-post-date, #post-min-read {
+    display: none; /* commented out for testing on 19jun2014 */
+    }
+    .post-stream {
+    padding: 20px 0 20px 0; 
     }
 
     .smallscreens {
@@ -700,6 +728,10 @@ footer {
     .post {
         color: #222222;
     }
+
+    #blog-title, #blog-title a, #blog-title a:visited, #blog-description {
+        color: #fff;
+    } 
 }
 
 @media only screen and (max-width: 320px) { 
