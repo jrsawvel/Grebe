@@ -34,14 +34,12 @@
 
 <!-- <div id="scroll_text"> -->
 
-<!-- tmpl_include name="inc_headernav.tmpl" -->
-
 <!-- tmpl_if usinglargeimageheader -->
-<div id="imageheader">
-<center>
-<img src="<!-- tmpl_var name="largeimageheaderurl" -->">
-</center>
+<div id="largeimageheader" style="background-image: url('<!-- tmpl_var name="largeimageheaderurl" -->')"> 
+<!-- tmpl_include name="inc_headernav.tmpl" -->
 </div>
+<!-- tmpl_else -->
+<!-- tmpl_include name="inc_headernav.tmpl" -->
 <!-- /tmpl_if -->
 
 <section id="content">

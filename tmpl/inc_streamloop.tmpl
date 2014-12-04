@@ -3,6 +3,15 @@
 <div class="post-stream">
 <article class="post">
 <div class="<!-- tmpl_var name="user_action" -->">
+
+<!-- tmpl_if imageheader -->
+<div class="stream-imageheader">
+<a href="<!-- tmpl_var name="cgi_app" -->/<!-- tmpl_var name="post_id" -->/<!-- tmpl_var name="uri_title" -->" class="inner" style="background-image: url('<!-- tmpl_var name="imageheaderurl" -->');">
+<img src="<!-- tmpl_var name="imageheaderurl" -->">
+</a>
+</div>
+<!-- /tmpl_if -->
+
 <!-- <!-- tmpl_var name="post_type" --> -->
 <h1 class="headingtext"><a href="<!-- tmpl_var name="cgi_app" -->/<!-- tmpl_var name="post_id" -->/<!-- tmpl_var name="uri_title" -->"><!-- tmpl_var name="title" --></a></h1>
 <div class="largescreens-<!-- tmpl_var name="post_type" -->"> <!-- tmpl_var name="formatted_text" --> </div>

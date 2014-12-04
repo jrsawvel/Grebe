@@ -81,7 +81,7 @@ sub _create_posts_sql {
     $order_by    = "a.modified_date" if $hash_ref->{sort_by} eq "modified";
 
     my $sql = <<EOSQL;
-        select a.post_id, a.title, a.uri_title, a.formatted_text, a.author_id, a.post_type, a.post_status, a.tags, a.modified_date, u.user_name, 
+        select a.post_id, a.title, a.uri_title, a.markup_text, a.formatted_text, a.author_id, a.post_type, a.post_status, a.tags, a.modified_date, u.user_name, 
         date_format(date_add(a.modified_date, interval 0 hour), '%b %d, %Y') as formatted_date
         from $dbtable_posts a, $dbtable_users u 
         where $where_str and a.author_id = u.user_id
@@ -133,6 +133,17 @@ sub _format_posts {
         
         delete($hash_ref->{author_id});
         delete($hash_ref->{post_status});
+
+        if ( $hash_ref->{markup_text} =~ m|^imageheader[\s]*=[\s]*(.+)|im ) {
+            $hash_ref->{imageheader} = 1;
+            $hash_ref->{imageheaderurl}   = StrNumUtils::trim_spaces($1);
+        }
+
+        if ( $hash_ref->{markup_text} =~ m|^largeimageheader[\s]*=[\s]*(.+)|im ) {
+            $hash_ref->{imageheader} = 1;
+            $hash_ref->{imageheaderurl}   = StrNumUtils::trim_spaces($1);
+        }
+        delete($hash_ref->{markup_text});
        
         my $tmp_tag_str = $hash_ref->{tags};
         if ( length($tmp_tag_str) > 2 ) {

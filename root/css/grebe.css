@@ -387,17 +387,17 @@ footer {
     position: relative;
     display: table;
     width: 100%;
-    /* height: 60%;  see NOTE above to make this work */
     text-align: center;
     color: #ffffff;
     background: #000000 no-repeat center center; 
     background-size: cover;
+    height: 30%;
+    /* height: 60%;  see NOTE above to make this work */
 /*
     padding-top: 1em;  
     padding-bottom: 1em;
 */
 /*    background-image: url(http://maketoledo.com/images/downtown-toledo-winter-a.jpg); */
-    height: 30%;
     /* opacity: 0.5;  */
     /* filter:alpha(opacity=50); */ /* For IE8 and earlier */
 }
@@ -489,9 +489,40 @@ footer {
 }
 
 /* h. image header for post page */
-#imageheader img {
+
+.stream-imageheader {
+    height: 300px;
+    margin: 0 auto 20px auto;
+    overflow: hidden;
+    max-width: 700px;
+    background: gray;
+}
+
+.stream-imageheader .inner {
+    display: block;
     width: 100%;
-    max-width: 1280px;
+    height: 100%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.stream-imageheader img {
+    display: block;
+    max-width: 100%;
+    visibility: hidden
+}
+
+#largeimageheader {
+    position: relative;
+    display: table;
+    width: 100%;
+    height: 60%;
+    background: #000000 no-repeat center center; 
+    background-size: cover;
+    text-align: center;
+    color: #ffffff;
 }
 
 .codeClass pre {
@@ -655,12 +686,21 @@ footer {
 
 /* 37.5em = 600px */
 @media only screen and (max-width: 37.5em) {
+    .stream-imageheader {
+        height: 240px;
+    }
+
     .post-stream h1 {
         font-size: 1.1em;
     }
 
     #site-head {
         height: 20%;
+    }
+
+    #largeimageheader {
+        padding-top: 65%;
+        height: auto;
     }
 
     .post {
@@ -673,11 +713,13 @@ footer {
         display: none;
     }
 
-    .largescreens-article, .largescreens-draft, .homepage-tagstring, .homepage-min-read, .homepage-post-author, .homepage-post-date, #post-min-read {
-    display: none; /* commented out for testing on 19jun2014 */
+    /* .homepage-post-author, .homepage-post-date */
+    .largescreens-article, .largescreens-draft, .homepage-min-read,  .homepage-tagstring, #post-min-read {
+        display: none; /* commented out for testing on 19jun2014 */
     }
+
     .post-stream {
-    padding: 20px 0 20px 0; 
+        padding: 20px 0 20px 0; 
     }
 
     .smallscreens {
@@ -719,6 +761,12 @@ footer {
 
 }
 
+@media only screen and (max-width: 480px) { 
+    .stream-imageheader {
+        height: 180px;
+    }
+}
+
 @media only screen and (min-width: 320px) { 
     #textareaboxpost {
         width: 95%;
@@ -735,6 +783,10 @@ footer {
 }
 
 @media only screen and (max-width: 320px) { 
+    .stream-imageheader {
+        height: 100px;
+    }
+
     #scroll_text {
         width: 100%;
         height: 700px;
@@ -779,6 +831,8 @@ footer {
         margin-bottom: 25px;
     }
 }    
+
+
 
 
 /* ==========================================================================

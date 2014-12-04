@@ -56,12 +56,12 @@ sub get_post {
 
         if ( $hash_ref->{markup_text} =~ m|^imageheader[\s]*=[\s]*(.+)|im ) {
             $hash_ref->{usingimageheader} = 1;
-            $hash_ref->{imageheaderurl}   = $1;
+            $hash_ref->{imageheaderurl}   = StrNumUtils::trim_spaces($1);
         }
 
         if ( $hash_ref->{markup_text} =~ m|^largeimageheader[\s]*=[\s]*(.+)|im ) {
             $hash_ref->{usinglargeimageheader} = 1;
-            $hash_ref->{largeimageheaderurl}   = $1;
+            $hash_ref->{largeimageheaderurl}   = StrNumUtils::trim_spaces($1);
         }
 
         if ( $hash_ref->{author_id} != $user_auth->{logged_in_user_id} ) {
