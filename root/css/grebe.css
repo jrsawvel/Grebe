@@ -613,6 +613,7 @@ footer {
 /* http://fortawesome.github.io/Font-Awesome/ */
 .fa {
     color: #666666;
+    color: #c0c0c0;
 }
 
 .fa-cog, .fa-pencil, .fa-file-text  {
