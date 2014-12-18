@@ -44,6 +44,7 @@ sub create_new_password {
 
     my $username          = $json_params->{"user_name"};
     my $email             = $json_params->{"email"};
+    my $client_url        = $json_params->{"client_url"};
     my $error_exists = 0;
     my $err_msg = "";
     my $debug_mode         = Config::get_value_for("debug_mode");
@@ -90,7 +91,7 @@ sub create_new_password {
     }
 
     if ( !$debug_mode and $passwordless_login ) {
-        Mail::send_passwordless_login_link($h[0]{EMAIL}, $h[0]{USERDIGEST}, $h[0]{PWDDIGEST});
+        Mail::send_passwordless_login_link($h[0]{EMAIL}, $h[0]{USERDIGEST}, $h[0]{PWDDIGEST}, $client_url);
     }
 
     my %hash;

@@ -9,6 +9,7 @@ sub send_passwordless_login_link {
     my $email_rcpt      = shift;
     my $user_digest     = shift;
     my $password_digest = shift;
+    my $client_url      = shift;
 
     my $date_time = Utils::create_datetime_stamp();
 
@@ -18,6 +19,10 @@ sub send_passwordless_login_link {
 
     my $home_page = Config::get_value_for("home_page");
     my $link      = "$home_page/nopwdlogin/$user_digest/$password_digest";
+
+    if ( $client_url ) {
+        $link = "$client_url/nopwdlogin/$user_digest/$password_digest";
+    }
 
     my $site_name = Config::get_value_for("site_name");
     my $subject = "$site_name Login Link - $date_time UTC";
