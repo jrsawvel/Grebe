@@ -79,7 +79,7 @@ sub custom_commands {
     # q. and q..
     # hr.
     # br.
-    # more.
+    # more. and more..
     # code. and code..
     # fence. and fence..
 
@@ -92,10 +92,11 @@ sub custom_commands {
     $formattedcontent =~ s/^fence[.][.]/<\/code><\/pre><\/div>/igm;
     $formattedcontent =~ s/^fence[.]/<div class="fenceClass"><pre><code>/igm;
 
-    $formattedcontent =~ s/^hr[.]/<hr \/>/igm;
+    $formattedcontent =~ s/^hr[.]/<hr class="shortgrey" \/>/igm;
 
     $formattedcontent =~ s/^br[.]/<br \/>/igm;
 
+    $formattedcontent =~ s/^more[.][.]/<\/more>/igm;
     $formattedcontent =~ s/^more[.]/<more \/>/igm;
 
     return $formattedcontent;
@@ -242,6 +243,8 @@ sub remove_power_commands {
     # newline_to_br=yes|no
     # url_to_link=yes|no
     # textile=yes|no
+    # block_id=
+    # more_text=yes|no
 
     $str =~ s|^toc[\s]*=[\s]*[noNOyesYES]+||mig;
     $str =~ s|^draft[\s]*=[\s]*[noNOyesYES]+||mig;
@@ -250,6 +253,8 @@ sub remove_power_commands {
     $str =~ s|^newline_to_br[\s]*=[\s]*[noNOyesYES]+||mig;
     $str =~ s|^url_to_link[\s]*=[\s]*[noNOyesYES]+||mig;
     $str =~ s|^textile[\s]*=[\s]*[noNOyesYES]+||mig;
+    $str =~ s|^block_id[\s]*=[\s]*[\d]+||mig;
+    $str =~ s|^more_text[\s]*=[\s]*[noNOyesYES]+||mig;
 
     return $str;
 }
@@ -438,6 +443,18 @@ sub _get_instagram_image_url {
     }
 
     return $img_url;
+}
+
+sub get_block_id {
+    my $str = shift;
+
+    my $block_id = 0;
+    
+    if ( $str =~ m|^(block_id[\s]*=[\s]*)(.*?)$|mi ) {
+        my $tmp_num = StrNumUtils::trim_spaces($2);
+        $block_id = $tmp_num if StrNumUtils::is_numeric($tmp_num); 
+    }
+    return $block_id;
 }
 
 1;

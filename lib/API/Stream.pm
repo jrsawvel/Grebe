@@ -73,15 +73,18 @@ sub _create_posts_sql {
 
     if ( $hash_ref->{filter_by_author_name} ) {
         $where_str = " a.author_id=$user_ref->{user_id} and " . $where_str;
+    } elsif ( $hash_ref->{sort_by} eq "blocks" ) {
+        $where_str = " a.block_id > 0 and " . $where_str;        
     }
 
     my $limit_str = " limit $max_entries_plus_one offset $page_offset ";
 
     my $order_by = "a.created_date";
     $order_by    = "a.modified_date" if $hash_ref->{sort_by} eq "modified";
+    $order_by    = "a.block_id"      if $hash_ref->{sort_by} eq "blocks";
 
     my $sql = <<EOSQL;
-        select a.post_id, a.title, a.uri_title, a.markup_text, a.formatted_text, a.author_id, a.post_type, a.post_status, a.tags, a.modified_date, u.user_name, 
+        select a.post_id, a.title, a.uri_title, a.markup_text, a.formatted_text, a.author_id, a.post_type, a.post_status, a.tags, a.modified_date, u.user_name, a.block_id, 
         date_format(date_add(a.modified_date, interval 0 hour), '%b %d, %Y') as formatted_date
         from $dbtable_posts a, $dbtable_users u 
         where $where_str and a.author_id = u.user_id
@@ -143,7 +146,6 @@ sub _format_posts {
             $hash_ref->{imageheader} = 1;
             $hash_ref->{imageheaderurl}   = StrNumUtils::trim_spaces($1);
         }
-        delete($hash_ref->{markup_text});
        
         my $tmp_tag_str = $hash_ref->{tags};
         if ( length($tmp_tag_str) > 2 ) {
@@ -154,7 +156,16 @@ sub _format_posts {
 
         my $str = $hash_ref->{formatted_text}; 
 
-        if ( $str =~ m|^(.*?)<p><more \/><\/p>(.*?)$|is ) {
+        if ( $str =~ m|<p><more \/><\/p>(.*?)<p><\/more><\/p>(.*?)$|is ) {
+            $str = $1;
+            my $tmp_extended = StrNumUtils::trim_spaces($2);
+            if ( length($tmp_extended) > 0 ) {
+                $hash_ref->{more_text_exists} = 1;
+                if ( !Utils::get_power_command_on_off_setting_for("more_text", $hash_ref->{markup_text}, 1) ) {
+                    $hash_ref->{more_text_exists} = 0;
+                }
+            }
+        } elsif ( $str =~ m|^(.*?)<p><more \/><\/p>(.*?)$|is ) {
             $str = $1;
             my $tmp_extended = StrNumUtils::trim_spaces($2);
             if ( length($tmp_extended) > 0 ) {
@@ -171,6 +182,8 @@ sub _format_posts {
             }
         }
         $hash_ref->{formatted_text} = $str;
+
+        delete($hash_ref->{markup_text});
 
         if ( $hash_ref->{post_type} eq "note" ) {
             delete($hash_ref->{title});

@@ -106,6 +106,8 @@ sub update_post {
 
     my $formatted_text;
 
+    my $block_id = Format::get_block_id($tmp_markup_text);
+
     if ( $content_type eq "article" ) {
         $formatted_text = Format::format_content($tmp_markup_text, $markup_type);
     } elsif ( $content_type eq "note" ) {
@@ -117,7 +119,7 @@ sub update_post {
     my %hash;
 
     if ( $submit_type eq "Update" ) {
-        $post_id = _update_post($logged_in_user_id, $post_title, $uri_title, $markup_text, $formatted_text, $content_type, $tag_list_str, $post_id, $post_digest, $edit_reason);
+        $post_id = _update_post($logged_in_user_id, $post_title, $uri_title, $markup_text, $formatted_text, $content_type, $tag_list_str, $post_id, $post_digest, $edit_reason, $block_id);
         $hash{post_id}       = $post_id;
         if ( $formtype eq "ajax" ) {
             $hash{formatted_text} = $formatted_text;
@@ -152,13 +154,14 @@ sub _update_post {
     my $formatted_text = shift;
     my $content_type   = shift;
     my $tag_list_str   = shift;
-    my $post_id     = shift;
-    my $post_digest = shift;
+    my $post_id        = shift;
+    my $post_digest    = shift;
     my $edit_reason    = shift;
+    my $block_id       = shift;
 
     my $post_type   = "article";
     my $post_status = "o";
-    my $parent_id      = 0;
+    my $parent_id   = 0;
 
     my $date_time = Utils::create_datetime_stamp();
 
@@ -195,7 +198,7 @@ sub _update_post {
     my %old;
     $sql =  "select post_id, title, uri_title, markup_text, formatted_text, ";
     $sql .= "post_type, post_status, author_id, created_date, modified_date, ";
-    $sql .= "version, post_digest, edit_reason, tags "; 
+    $sql .= "version, post_digest, edit_reason, tags, block_id "; 
     $sql .= "from $dbtable_posts where post_id=$aid";
     $db->execute($sql);
     Error::report_error("500", "Error executing SQL", $db->errstr) if $db->err;
@@ -206,21 +209,22 @@ sub _update_post {
         $old{uri_title}        = $db->quote($db->getcol("uri_title"));
         $old{markup_text}      = $db->quote($db->getcol("markup_text"));
         $old{formatted_text}   = $db->quote($db->getcol("formatted_text"));
-        $old{post_type}     = $db->getcol("post_type");
-        $old{post_status}   = $db->getcol("post_status");
+        $old{post_type}        = $db->getcol("post_type");
+        $old{post_status}      = $db->getcol("post_status");
         $old{author_id}        = $db->getcol("author_id");
         $old{created_date}     = $db->getcol("created_date");
         $old{modified_date}    = $db->getcol("modified_date");
         $old{version}          = $db->getcol("version");
-        $old{post_digest}   = $db->getcol("post_digest");
+        $old{post_digest}      = $db->getcol("post_digest");
         $old{edit_reason}      = $db->quote($db->getcol("edit_reason"));
         $old{tags}             = $db->quote($db->getcol("tags"));
+        $old{block_id}         = $db->getcol("block_id");
     }
     Error::report_error("500", "Error retrieving data from database. $sql", $db->errstr) if $db->err;
 
     my $status = 'v';  # previous version 
-    $sql =  "insert into $dbtable_posts (parent_id, title, uri_title, markup_text, formatted_text, post_type, post_status, author_id, created_date, modified_date, version, post_digest,  edit_reason, tags)";
-    $sql .= " values ($old{parent_id}, $old{title}, $old{uri_title}, $old{markup_text}, $old{formatted_text}, '$old{post_type}', '$status', $old{author_id}, '$old{created_date}', '$old{modified_date}', $old{version}, '$old{post_digest}', $old{edit_reason}, $old{tags})";
+    $sql =  "insert into $dbtable_posts (parent_id, title, uri_title, markup_text, formatted_text, post_type, post_status, author_id, created_date, modified_date, version, post_digest,  edit_reason, tags, block_id)";
+    $sql .= " values ($old{parent_id}, $old{title}, $old{uri_title}, $old{markup_text}, $old{formatted_text}, '$old{post_type}', '$status', $old{author_id}, '$old{created_date}', '$old{modified_date}', $old{version}, '$old{post_digest}', $old{edit_reason}, $old{tags}, $old{block_id})";
 
     $db->execute($sql);
     Error::report_error("500", "(28) Error executing SQL", $db->errstr) if $db->err;
@@ -231,7 +235,7 @@ sub _update_post {
     my $version = $old{version} + 1;
     my $new_status = 'o';
     $sql = "update $dbtable_posts ";
-    $sql .= " set title=$title, uri_title=$uri_title, markup_text=$markup_text, formatted_text=$formatted_text, post_type='$post_type', author_id=$author_id, modified_date='$date_time', post_status='$new_status', version=$version, edit_reason=$edit_reason, tags=$quoted_tag_list_str ";
+    $sql .= " set title=$title, uri_title=$uri_title, markup_text=$markup_text, formatted_text=$formatted_text, post_type='$post_type', author_id=$author_id, modified_date='$date_time', post_status='$new_status', version=$version, edit_reason=$edit_reason, tags=$quoted_tag_list_str, block_id=$block_id ";
     $sql .= " where post_id=$aid";
     $db->execute($sql);
     Error::report_error("500", "(29) Error executing SQL", $db->errstr) if $db->err;

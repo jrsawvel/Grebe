@@ -32,6 +32,11 @@ sub show_changes {
     _show_stream($tmp_hash, "changes");
 }
 
+sub show_blocks {
+    my $tmp_hash = shift;
+    _show_stream($tmp_hash, "blocks");
+}
+
 sub _show_stream {
     my $tmp_hash = shift;
     my $post_type = shift;
@@ -88,6 +93,8 @@ sub _show_stream {
         $template_name = "drafts";
     } elsif ( $post_type eq "changes" ) {
         $query_string .= "&sortby=modified";
+    } elsif ( $post_type eq "blocks" ) {
+        $query_string .= "&sortby=blocks";
     }
 
     my $rest = REST::Client->new();

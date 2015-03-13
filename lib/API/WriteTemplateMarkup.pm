@@ -184,7 +184,8 @@ sub _write_html_to_memcached {
 sub _write_homepage_to_memcached {
     my $hash_ref = shift;
 
-    my $html = get(Config::get_value_for("home_page") . "/articles");
+#    my $html = get(Config::get_value_for("home_page") . "/articles");
+    my $html = get(Config::get_value_for("home_page") . "/blocks");
     $html .= "\n<!-- memcached -->\n";
     
     my $port        = Config::get_value_for("memcached_port");

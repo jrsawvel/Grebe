@@ -17,6 +17,7 @@ create table grebe_posts (
     post_digest    varchar(255),
     edit_reason    varchar(255),
     tags           varchar(255),
+    block_id       mediumint unsigned not null default 0,
     index(parent_id)
 ) ENGINE=MyISAM;
 

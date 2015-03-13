@@ -43,6 +43,7 @@ my $dispatch_for = {
     notes              =>   sub { return \&do_sub(       "ShowStream",     "show_notes"               ) }, 
     drafts             =>   sub { return \&do_sub(       "ShowStream",     "show_drafts"              ) }, 
     changes            =>   sub { return \&do_sub(       "ShowStream",     "show_changes"             ) }, 
+    blocks             =>   sub { return \&do_sub(       "ShowStream",     "show_blocks"              ) }, 
     textsize           =>   sub { return \&do_sub(       "TextSize",       "set_text_size"            ) },
     fonttype           =>   sub { return \&do_sub(       "FontType",       "set_font_type"            ) },
     #rss                =>   sub { return \&do_sub(            "RSS",       "get_rss"                  ) },
@@ -50,7 +51,8 @@ my $dispatch_for = {
 
 sub execute {
     my $function = $cgi_params{function};
-    $dispatch_for->{articles}->() if !defined($function) or !$function;
+#    $dispatch_for->{articles}->() if !defined($function) or !$function;
+    $dispatch_for->{blocks}->() if !defined($function) or !$function;
 
 # if using /post/ in the url, then use this line:
 #    $dispatch_for->{showerror}->($function) unless exists $dispatch_for->{$function} ;

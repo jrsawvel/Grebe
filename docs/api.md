@@ -81,6 +81,7 @@ GET request.
 `/posts/?type=note&author=jr`   
 `/posts/?type=draft&author=jr`   
 `/posts/?sortby=modified`  
+`/posts/?sortby=blocks`  
 `/posts/?page=3`  
 `/posts/?author=jr`  
 **To-Do:** support  

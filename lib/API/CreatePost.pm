@@ -91,6 +91,8 @@ sub create_post {
 
     my $formatted_text;
 
+    my $block_id = Format::get_block_id($tmp_markup_text);
+
     if ( $content_type eq "article" ) {
         $formatted_text = Format::format_content($tmp_markup_text, $markup_type);
     } elsif ( $content_type eq "note" ) {
@@ -104,7 +106,7 @@ sub create_post {
     my $post_id = 0;
 
     if ( $submit_type eq "Post" ) {
-        $post_id = _create_post($logged_in_user_id, $post_title, $uri_title, $markup_text, $formatted_text, $content_type, $tag_list_str);
+        $post_id = _create_post($logged_in_user_id, $post_title, $uri_title, $markup_text, $formatted_text, $content_type, $tag_list_str, $block_id);
         $hash{post_id}       = $post_id;
         if ( $formtype eq "ajax" ) {
             $hash{formatted_text} = $formatted_text;
@@ -149,6 +151,7 @@ sub _create_post {
     my $formatted_text = shift;
     my $content_type   = shift;
     my $tag_list_str   = shift;
+    my $block_id       = shift;
 
     my $post_type; 
     my $post_status = "o";
@@ -184,11 +187,11 @@ sub _create_post {
         insert into $dbtable_posts 
             (parent_id, title, uri_title, markup_text, formatted_text, 
               post_type, post_status, author_id, 
-              created_date, modified_date, post_digest, tags)
+              created_date, modified_date, post_digest, tags, block_id)
         values 
             ($parent_id, $title, $uri_title, $markup_text, $formatted_text, 
               '$post_type', '$post_status', $author_id, 
-              '$date_time', '$date_time', '$post_digest', $quoted_tag_list_str) 
+              '$date_time', '$date_time', '$post_digest', $quoted_tag_list_str, $block_id) 
 EOSQL
 
     my $post_id = $db->execute($sql);
