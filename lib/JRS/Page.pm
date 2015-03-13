@@ -130,12 +130,14 @@ use JRS::DateTimeFormatter;
         __set_template_variable($self, "theme",             User::get_theme());
 
         if ( $post_id ) {
-            # save html to redis
-            require Redis;
+            my $key;
             my $hashname =  Config::get_value_for("domain_name");
-            my $key      = $post_id;
-            my $redis = Redis->new; 
-            $redis->hset($hashname, $key => $self->{TMPL}->output );
+
+            # save html to redis
+            # require Redis;
+            #my $key      = $post_id;
+            #my $redis = Redis->new; 
+            #$redis->hset($hashname, $key => $self->{TMPL}->output );
 
             require Cache::Memcached::libmemcached;
             my $port = Config::get_value_for("memcached_port");

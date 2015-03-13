@@ -71,7 +71,7 @@ textarea {
 blockquote {
     margin-left: .6em;
     padding-left: 1em;
-    /*  border-left: .1em solid #ddd; */ 
+    border-left: .2em solid #ddd; 
 }
 
 table {
@@ -79,6 +79,16 @@ table {
     font-family: "Open Sans", Arial, Helvetica, sans-serif; 
     color: #000000;
 }
+
+hr.shortgrey {
+   border: 0; 
+   height: 1px; 
+   background: #ddd;
+   width: 25%;
+   margin-top:2em;
+   margin-bottom:2em;
+}
+
 
 h1, h2, h3, h4, h5 {
     color: #000000;
@@ -268,8 +278,8 @@ footer {
 
 .post {
     color: #000000;
-    font-size: 1.2em; 
-    /* font-size: 125% */
+    /* font-size: 1.2em;  */
+    font-size: 125%;
     /* font-size: 120%; approx same as 1.2em */
     line-height: 1.7em;
 }
@@ -296,6 +306,10 @@ footer {
 
 .post big, em {
     font-family: "Open Sans", Arial, Helvetica, sans-serif; 
+}
+
+.post big {
+    color: #666;
 }
 
 .post strong {
