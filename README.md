@@ -2,6 +2,14 @@
 
 Grebe is a multi-user blogging app or small CMS.
 
+[Grebe help](http://grebe.soupmode.com/tag/help)
+
+* [user documentation](http://grebe.soupmode.com/613/grebe-user-documentation)
+* [formatting help](http://grebe.soupmode.com/610/grebe-formatting-help)
+* [creating and editing tips](http://grebe.soupmode.com/612/grebe-creating-and-editing-tips)
+* [formatting sandbox](http://grebe.soupmode.com/611/grebe-formatting-sandbox)
+
+
 It's used at:
 
 * <http://maketoledo.com>
